@@ -1,0 +1,33 @@
+.banner {
+  background: linear-gradient(130deg, #1a5cce 0%, #2871e8 100%);
+  border-radius: 18px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  overflow: hidden;
+}
+
+.coinGraphic {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+}
+
+.body {
+  flex: 1;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1;
+}
+
+.sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.82);
+  margin-top: 4px;
+}

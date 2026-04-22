@@ -1,0 +1,55 @@
+.card {
+  background: var(--card-bg);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.thumb {
+  width: 72px;
+  height: 48px;
+  background: linear-gradient(135deg, #1853c8 0%, #1133a0 100%);
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.info {
+  flex: 1;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 5px;
+}
+
+.balanceRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.balance {
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.eyeBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.eyeBtn svg {
+  width: 18px;
+  height: 18px;
+}

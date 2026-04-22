@@ -1,0 +1,59 @@
+.banner {
+  background: linear-gradient(130deg, #261770 0%, #3a1a90 45%, #7b2c8d 100%);
+  border-radius: 18px;
+  padding: 20px 18px;
+  min-height: 155px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.textBlock {
+  flex: 1;
+  z-index: 1;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.sub {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.45;
+  max-width: 52%;
+  margin-bottom: 16px;
+}
+
+.sub strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+}
+
+.phoneArt {
+  position: absolute;
+  right: -8px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+}

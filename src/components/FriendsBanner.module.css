@@ -1,0 +1,67 @@
+@keyframes fadeInUp {
+  from { transform: translateY(12px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1c1f2e;
+  border-radius: 18px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.banner:active {
+  background: #22263a;
+  transform: scale(0.98);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatarStack {
+  display: flex;
+  align-items: center;
+}
+
+.stackAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1c1f2e;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+}
+
+.arrowBtn {
+  width: 32px;
+  height: 32px;
+  background: rgba(74, 128, 245, 0.12);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

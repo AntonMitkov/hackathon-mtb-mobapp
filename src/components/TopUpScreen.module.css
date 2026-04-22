@@ -1,0 +1,364 @@
+@keyframes screenSlideIn {
+  from { transform: translateX(40px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes fadeInUp {
+  from { transform: translateY(14px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes scaleIn {
+  from { transform: scale(0.93); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.screen {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--dark-bg);
+  display: flex;
+  flex-direction: column;
+  animation: screenSlideIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 56px 20px 16px;
+  flex-shrink: 0;
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px 4px 0;
+  display: flex;
+  align-items: center;
+}
+
+.topTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.scrollArea {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 20px 16px;
+}
+
+/* Section header */
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.sectionLabel {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.cameraBtn {
+  background: #2563eb;
+  border: none;
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Card form */
+.cardForm {
+  background: #1c1f2e;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  width: 100%;
+  animation: scaleIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.cardNumInput {
+  background: #13151f;
+  border: none;
+  border-radius: 24px;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 2px;
+  text-align: center;
+  width: 100%;
+  outline: none;
+  caret-color: #4a80f5;
+}
+
+.cardNumInput::placeholder {
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 2px;
+}
+
+.cardFormRow {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.halfInput {
+  flex: 1;
+  min-width: 0;
+  width: 0;
+  background: #13151f;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  outline: none;
+  caret-color: #4a80f5;
+}
+
+.halfInput::placeholder {
+  color: rgba(255,255,255,0.2);
+}
+
+/* Dots */
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.dot {
+  width: 20px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.2);
+}
+
+.dotActive {
+  background: rgba(255,255,255,0.7);
+}
+
+/* Destination card */
+.destCard {
+  background: #1c1f2e;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  animation: scaleIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+}
+
+.destTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.destName {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.destThumb {
+  width: 52px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.destBalance {
+  margin-bottom: 12px;
+}
+
+.destAmount {
+  font-size: 30px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.destCurrency {
+  font-size: 18px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.5);
+}
+
+.destBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 12px;
+}
+
+.destNum {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+}
+
+.destRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.destPoints {
+  background: rgba(0,0,0,0.5);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.mastercardDots {
+  position: relative;
+  width: 36px;
+  height: 22px;
+}
+
+.mcRed {
+  position: absolute;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #eb001b;
+  opacity: 0.9;
+}
+
+.mcOrange {
+  position: absolute;
+  left: 14px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f79e1b;
+  opacity: 0.9;
+}
+
+/* Countries link */
+.countriesLink {
+  background: none;
+  border: none;
+  color: #4a80f5;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0;
+  margin-bottom: 20px;
+  display: block;
+}
+
+/* Amount */
+.amountLabel {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.amountWrap {
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+
+.amountInput {
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff;
+  width: 100%;
+  caret-color: #4a80f5;
+}
+
+.amountInput::placeholder {
+  color: rgba(255,255,255,0.25);
+}
+
+.commission {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+}
+
+/* Swipe bar */
+.swipeBarWrap {
+  flex-shrink: 0;
+  padding: 12px 20px 32px;
+  background: linear-gradient(to top, var(--dark-bg) 70%, transparent);
+  animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+}
+
+.swipeTrack {
+  position: relative;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+}
+
+.swipeTrackActive {
+  background: rgba(37, 99, 235, 0.15);
+}
+
+.swipeThumb {
+  position: absolute;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 50%;
+  margin: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+  transition: background 0.15s;
+  z-index: 2;
+}
+
+.swipeThumb:active {
+  cursor: grabbing;
+}
+
+.swipeThumbRight {
+  left: auto;
+  right: 0;
+  cursor: default;
+}
+
+.swipeLabel {
+  font-size: 13px;
+  color: rgba(255,255,255,0.35);
+  text-align: center;
+  white-space: pre-line;
+  line-height: 1.4;
+  pointer-events: none;
+}
