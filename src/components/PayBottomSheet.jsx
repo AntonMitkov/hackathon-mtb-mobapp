@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom'
 import styles from './PayBottomSheet.module.css'
 import { Smartphone, CircleDollarSign, HandCoins, Coins, QrCode, BookOpen, X } from 'lucide-react'
 
@@ -35,7 +36,7 @@ const PAY_ITEMS = [
 ]
 
 export default function PayBottomSheet({ onClose }) {
-  return (
+  return createPortal(
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.sheet} onClick={(e) => e.stopPropagation()}>
         <div className={styles.handle} />
@@ -59,6 +60,7 @@ export default function PayBottomSheet({ onClose }) {
           ))}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

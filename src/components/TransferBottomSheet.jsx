@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom'
 import styles from './PayBottomSheet.module.css'
 import { CreditCard, Smartphone, Zap, X } from 'lucide-react'
 
@@ -20,7 +21,7 @@ const TRANSFER_ITEMS = [
 ]
 
 export default function TransferBottomSheet({ onClose }) {
-  return (
+  return createPortal(
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.sheet} onClick={(e) => e.stopPropagation()}>
         <div className={styles.handle} />
@@ -44,6 +45,7 @@ export default function TransferBottomSheet({ onClose }) {
           ))}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
