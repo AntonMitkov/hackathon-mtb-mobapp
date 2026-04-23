@@ -1,6 +1,6 @@
 import styles from './ServiceBanner.module.css'
 
-export default function ServiceBanner() {
+export default function ServiceBanner({ onClick }) {
   return (
     <div className={styles.banner}>
       <div className={styles.textBlock}>
@@ -9,7 +9,7 @@ export default function ServiceBanner() {
           Оформите МТкарту,<br />чтобы получать<br />
           <strong>дополнительные бонусы</strong>
         </div>
-        <button className={styles.btn}>Оформить карту &rsaquo;</button>
+        <button className={styles.btn} onClick={onClick}>Оформить карту &rsaquo;</button>
       </div>
 
       <div className={styles.phoneArt}>

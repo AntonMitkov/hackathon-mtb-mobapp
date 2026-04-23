@@ -1,8 +1,8 @@
 import styles from './ExchangeBanner.module.css'
 
-export default function ExchangeBanner() {
+export default function ExchangeBanner({ onClick }) {
   return (
-    <div className={styles.banner}>
+    <div className={styles.banner} onClick={onClick} role="button" style={{ cursor: onClick ? 'pointer' : 'default' }}>
       <svg className={styles.coinGraphic} viewBox="0 0 64 64" fill="none">
         <path d="M54 18 A26 26 0 0 1 60 36" stroke="white" strokeWidth="3.5" strokeLinecap="round" />
         <polygon points="60,36 55,28 65,28" fill="white" />

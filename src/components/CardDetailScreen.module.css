@@ -59,6 +59,101 @@
   animation: scaleIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
 }
 
+/* 3D flip */
+.cardScene {
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+  height: 195px;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.cardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: -webkit-transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cardFlipped {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+}
+
+.cardFace {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: #2d3d2d;
+  padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(0deg);
+  -webkit-transform: rotateY(0deg);
+}
+
+.cardBack {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  padding: 0;
+  justify-content: flex-end;
+}
+
+.cardBackStripe {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  right: 0;
+  height: 44px;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.cardBackContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 18px 16px;
+}
+
+.cardBackLabel {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.cardBackNumber {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cardBackRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.cardBackExpiry {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
 .card {
   position: relative;
   border-radius: 20px;
@@ -356,4 +451,126 @@
   color: var(--text-muted);
   text-align: center;
   font-size: 15px;
+}
+
+/* Transaction list */
+.txList {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+}
+
+.txRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  width: 100%;
+  transition: background 0.15s;
+}
+
+.txRow:active {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.txIconWrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  background: #1e3a82;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.txClock {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  background: var(--dark-bg);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.txDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.txMerchant {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.txDate {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 2px;
+}
+
+.txAmount {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.txPlus {
+  color: #4caf50;
+}
+
+/* Card info tab */
+.cardInfoList {
+  padding: 4px 20px;
+}
+
+.cardInfoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  animation: fadeInUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cardInfoRow:last-child {
+  border-bottom: none;
+}
+
+.cardInfoRow:nth-child(1) { animation-delay: 0.05s; }
+.cardInfoRow:nth-child(2) { animation-delay: 0.1s; }
+.cardInfoRow:nth-child(3) { animation-delay: 0.15s; }
+.cardInfoRow:nth-child(4) { animation-delay: 0.2s; }
+.cardInfoRow:nth-child(5) { animation-delay: 0.25s; }
+.cardInfoRow:nth-child(6) { animation-delay: 0.3s; }
+.cardInfoRow:nth-child(7) { animation-delay: 0.35s; }
+.cardInfoRow:nth-child(8) { animation-delay: 0.4s; }
+
+.cardInfoLabel {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.cardInfoValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  text-align: right;
 }

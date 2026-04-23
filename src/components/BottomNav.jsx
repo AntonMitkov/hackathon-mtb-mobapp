@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import styles from './BottomNav.module.css'
-import { Home, Wallet, MessageSquare, MoreHorizontal } from './icons'
+import { Home, Wallet, MapPin, MoreHorizontal } from './icons'
 
-export default function BottomNav() {
-  const [active, setActive] = useState('home')
+export default function BottomNav({ active = 'home', onTabChange }) {
+  const setActive = (id) => onTabChange?.(id)
 
   return (
     <nav className={styles.nav}>
@@ -13,8 +13,8 @@ export default function BottomNav() {
       <NavItem id="products" label="Продукты" active={active} onSelect={setActive}>
         <Wallet size={26} color={active === 'products' ? '#5b8ef5' : 'rgba(255,255,255,0.42)'} />
       </NavItem>
-      <NavItem id="chat" label="Чат" active={active} onSelect={setActive}>
-        <MessageSquare size={26} color={active === 'chat' ? '#5b8ef5' : 'rgba(255,255,255,0.42)'} />
+      <NavItem id="map" label="Карта" active={active} onSelect={setActive}>
+        <MapPin size={26} color={active === 'map' ? '#5b8ef5' : 'rgba(255,255,255,0.42)'} />
       </NavItem>
       <NavItem id="more" label="Ещё" active={active} onSelect={setActive} badge={1}>
         <MoreHorizontal size={26} color={active === 'more' ? '#5b8ef5' : 'rgba(255,255,255,0.42)'} />

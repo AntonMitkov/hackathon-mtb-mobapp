@@ -1,31 +1,57 @@
 import { useState } from 'react'
 import styles from './CardDetailScreen.module.css'
 import { ChevronLeft, ChevronRight, Wifi, Maximize2 } from 'lucide-react'
-import { IconTopUp, IconTransfer, IconPay, IconGift } from './icons'
+import { IconTopUp, IconTransfer, IconPay, IconGift, IconCard, IconClock } from './icons'
 import PayBottomSheet from './PayBottomSheet'
 import TransferBottomSheet from './TransferBottomSheet'
 import PointsScreen from './PointsScreen'
 import TopUpScreen from './TopUpScreen'
+import TransactionDetailScreen from './TransactionDetailScreen'
 
 const TABS = ['Настройки', 'История', 'Информация']
 
+const TRANSACTIONS = [
+  { id: 1,  merchant: '"PEREKRESTOK CENTROPOL', cardName: 'Кактус BYN 5*4685', amount: '-9.79',   date: '22 апреля 2026 20:53', type: 'Оплата товаров и услуг', mcc: '5399', status: 'В процессе' },
+  { id: 2,  merchant: 'BURGER KING #1452',      cardName: 'Кактус BYN 5*4685', amount: '-14.50',  date: '22 апреля 2026 13:10', type: 'Оплата товаров и услуг', mcc: '5812', status: 'Выполнено' },
+  { id: 3,  merchant: 'WOLT DELIVERY',          cardName: 'Кактус BYN 5*4685', amount: '-27.30',  date: '21 апреля 2026 19:44', type: 'Оплата товаров и услуг', mcc: '5812', status: 'Выполнено' },
+  { id: 4,  merchant: 'YANDEX.TAXI',            cardName: 'Кактус BYN 5*4685', amount: '-6.20',   date: '21 апреля 2026 09:17', type: 'Оплата услуг',           mcc: '4121', status: 'Выполнено' },
+  { id: 5,  merchant: 'MINSK METRO',            cardName: 'Кактус BYN 5*4685', amount: '-0.95',   date: '20 апреля 2026 08:02', type: 'Оплата услуг',           mcc: '4111', status: 'Выполнено' },
+  { id: 6,  merchant: 'NETFLIX.COM',            cardName: 'Кактус BYN 5*4685', amount: '-16.99',  date: '19 апреля 2026 00:00', type: 'Оплата услуг',           mcc: '7832', status: 'Выполнено' },
+  { id: 7,  merchant: 'ZARA MINSK GALLERIA',    cardName: 'Кактус BYN 5*4685', amount: '-89.90',  date: '18 апреля 2026 15:33', type: 'Оплата товаров и услуг', mcc: '5621', status: 'Выполнено' },
+  { id: 8,  merchant: 'ПОПОЛНЕНИЕ СЧЁТА',       cardName: 'Кактус BYN 5*4685', amount: '+500.00', date: '17 апреля 2026 10:00', type: 'Пополнение',             mcc: '—',    status: 'Выполнено' },
+  { id: 9,  merchant: 'SPORTMASTER #07',        cardName: 'Кактус BYN 5*4685', amount: '-134.00', date: '16 апреля 2026 17:21', type: 'Оплата товаров и услуг', mcc: '5941', status: 'Выполнено' },
+  { id: 10, merchant: 'STEAM GAMES',            cardName: 'Кактус BYN 5*4685', amount: '-29.99',  date: '15 апреля 2026 22:05', type: 'Оплата услуг',           mcc: '7995', status: 'Выполнено' },
+]
+
 const SETTINGS = [
-  { label: 'Настройка опций',                               type: 'arrow'  },
-  { label: 'Лимиты',                                        type: 'arrow'  },
-  { label: 'Сменить ПИН-код',                               type: 'arrow'  },
+  { label: 'Настройка опций',                               type: 'arrow', featureId: 'cardOptions' },
+  { label: 'Лимиты',                                        type: 'arrow', featureId: 'cardLimits' },
+  { label: 'Сменить ПИН-код',                               type: 'arrow', featureId: 'changePin' },
   { label: 'Заблокировать',                                 type: 'toggle', key: 'blocked' },
   { label: 'SMS-уведомления',                               type: 'toggle', key: 'sms'     },
-  { label: 'Перевыпустить',                                 type: 'arrow'  },
+  { label: 'Перевыпустить',                                 type: 'arrow', featureId: 'reissueCard' },
   { label: 'Использовать для зачислений\nпо номеру телефона', type: 'toggle', key: 'phone'  },
 ]
 
-export default function CardDetailScreen({ onBack }) {
+const CARD_INFO = [
+  { label: 'Тип карты', value: 'Дебетовая' },
+  { label: 'Платёжная система', value: 'Mastercard' },
+  { label: 'Номер карты', value: '5347 6685 9231 4685' },
+  { label: 'Срок действия', value: '06/27' },
+  { label: 'Валюта', value: 'BYN' },
+  { label: 'Статус', value: 'Активна' },
+  { label: 'Дата открытия', value: '15 января 2024' },
+  { label: 'Пакет услуг', value: 'Simple' },
+]
+
+export default function CardDetailScreen({ onBack, onFeature }) {
   const [activeTab, setActiveTab] = useState(0)
   const [toggles, setToggles] = useState({ blocked: false, sms: false, phone: true })
   const [showPay, setShowPay] = useState(false)
   const [showTransfer, setShowTransfer] = useState(false)
   const [showPoints, setShowPoints] = useState(false)
   const [showTopUp, setShowTopUp] = useState(false)
+  const [selectedTx, setSelectedTx] = useState(null)
 
   const flip = (key) => setToggles(t => ({ ...t, [key]: !t[key] }))
 
@@ -35,6 +61,10 @@ export default function CardDetailScreen({ onBack }) {
 
   if (showPoints) {
     return <PointsScreen onBack={() => setShowPoints(false)} />
+  }
+
+  if (selectedTx) {
+    return <TransactionDetailScreen tx={selectedTx} onBack={() => setSelectedTx(null)} />
   }
 
   return (
@@ -75,7 +105,12 @@ export default function CardDetailScreen({ onBack }) {
         {activeTab === 0 && (
           <div className={styles.settingsList}>
             {SETTINGS.map((item) => (
-              <div key={item.label} className={styles.settingRow}>
+              <div
+                key={item.label}
+                className={styles.settingRow}
+                onClick={item.type === 'arrow' ? () => onFeature?.(item.featureId) : undefined}
+                style={item.type === 'arrow' ? { cursor: 'pointer' } : undefined}
+              >
                 <span className={styles.settingLabel}>{item.label}</span>
                 {item.type === 'arrow'
                   ? <ChevronRight size={18} color="rgba(255,255,255,0.35)" />
@@ -86,12 +121,59 @@ export default function CardDetailScreen({ onBack }) {
           </div>
         )}
 
-        {activeTab === 1 && <div className={styles.emptyTab}>История транзакций</div>}
-        {activeTab === 2 && <div className={styles.emptyTab}>Информация о карте</div>}
+        {activeTab === 1 && (
+          <div className={styles.txList}>
+            {TRANSACTIONS.map(tx => (
+              <button key={tx.id} className={styles.txRow} onClick={() => setSelectedTx(tx)}>
+                <div className={styles.txIconWrap}>
+                  <IconCard size={20} color="rgba(255,255,255,0.85)" />
+                  <div className={styles.txClock}>
+                    <IconClock size={11} color="rgba(255,255,255,0.45)" />
+                  </div>
+                </div>
+                <div className={styles.txDetails}>
+                  <div className={styles.txMerchant}>{tx.merchant}</div>
+                  <div className={styles.txDate}>{tx.date}</div>
+                </div>
+                <div className={`${styles.txAmount} ${tx.amount.startsWith('+') ? styles.txPlus : ''}`}>
+                  {tx.amount}
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {activeTab === 2 && (
+          <div className={styles.cardInfoList}>
+            {CARD_INFO.map((item, i) => (
+              <div key={i} className={styles.cardInfoRow}>
+                <span className={styles.cardInfoLabel}>{item.label}</span>
+                <span className={styles.cardInfoValue}>{item.value}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {showTransfer && <TransferBottomSheet onClose={() => setShowTransfer(false)} />}
-      {showPay && <PayBottomSheet onClose={() => setShowPay(false)} />}
+      {showTransfer && (
+        <TransferBottomSheet
+          onClose={() => setShowTransfer(false)}
+          onItemClick={(type) => {
+            setShowTransfer(false)
+            if (type === 'card') setShowTopUp(true)
+            else onFeature?.(type === 'phone' ? 'mobilePayment' : 'customPayment')
+          }}
+        />
+      )}
+      {showPay && (
+        <PayBottomSheet
+          onClose={() => setShowPay(false)}
+          onItemClick={(type) => {
+            setShowPay(false)
+            onFeature?.(type)
+          }}
+        />
+      )}
     </div>
   )
 }
@@ -119,36 +201,62 @@ function Toggle({ on, onToggle }) {
 }
 
 function CactusCard() {
+  const [flipped, setFlipped] = useState(false)
+
   return (
-    <div className={styles.card}>
-      <img src="/assets/card.png" className={styles.cardBg} alt="" aria-hidden="true" />
+    <div className={styles.cardScene} onClick={() => setFlipped(f => !f)}>
+      <div className={`${styles.cardInner} ${flipped ? styles.cardFlipped : ''}`}>
 
-      <div className={styles.cardTop}>
-        <span className={styles.cardName}>КАКТУС BYN</span>
-        <div className={styles.cardTopIcons}>
-          <Maximize2 size={20} color="rgba(255,255,255,0.7)" />
-          <div className={styles.nfcIcon}>
-            <Wifi size={18} color="white" strokeWidth={2.5} />
+        {/* Front */}
+        <div className={styles.cardFace}>
+          <img src="/assets/card.png" className={styles.cardBg} alt="" aria-hidden="true" />
+          <div className={styles.cardTop}>
+            <span className={styles.cardName}>КАКТУС BYN</span>
+            <div className={styles.cardTopIcons}>
+              <Maximize2 size={20} color="rgba(255,255,255,0.7)" />
+              <div className={styles.nfcIcon}>
+                <Wifi size={18} color="white" strokeWidth={2.5} />
+              </div>
+            </div>
+          </div>
+          <div className={styles.cardBalance}>
+            <span className={styles.cardAmount}>9.37</span>
+            <span className={styles.cardCurrency}> BYN</span>
+          </div>
+          <div className={styles.cardBottom}>
+            <div className={styles.cardMeta}>
+              <span className={styles.cardNum}>5*4685 · 06/27</span>
+            </div>
+            <div className={styles.cardRight}>
+              <div className={styles.pointsPill}>2.21 Баллов</div>
+              <div className={styles.mastercardDots}>
+                <div className={styles.mcRed} />
+                <div className={styles.mcOrange} />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className={styles.cardBalance}>
-        <span className={styles.cardAmount}>9.37</span>
-        <span className={styles.cardCurrency}> BYN</span>
-      </div>
-
-      <div className={styles.cardBottom}>
-        <div className={styles.cardMeta}>
-          <span className={styles.cardNum}>5*4685 · 06/27</span>
-        </div>
-        <div className={styles.cardRight}>
-          <div className={styles.pointsPill}>2.21 Баллов</div>
-          <div className={styles.mastercardDots}>
-            <div className={styles.mcRed} />
-            <div className={styles.mcOrange} />
+        {/* Back */}
+        <div className={`${styles.cardFace} ${styles.cardBack}`}>
+          <img src="/assets/card.png" className={styles.cardBg} alt="" aria-hidden="true" />
+          <div className={styles.cardBackStripe} />
+          <div className={styles.cardBackContent}>
+            <div className={styles.cardBackLabel}>Номер карты</div>
+            <div className={styles.cardBackNumber}>5347 6685 9231 4685</div>
+            <div className={styles.cardBackRow}>
+              <div>
+                <div className={styles.cardBackLabel}>Срок действия</div>
+                <div className={styles.cardBackExpiry}>06/27</div>
+              </div>
+              <div className={styles.mastercardDots}>
+                <div className={styles.mcRed} />
+                <div className={styles.mcOrange} />
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   )

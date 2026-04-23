@@ -12,7 +12,7 @@ export {
   CreditCard as IconCard,
   Home,
   Wallet,
-  MessageSquare,
+  MapPin,
   MoreHorizontal,
   ChevronLeft,
   ChevronRight,

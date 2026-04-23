@@ -268,6 +268,17 @@
   display: block;
 }
 
+.countriesInfo {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  background: rgba(74, 128, 245, 0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+  animation: fadeInUp 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 /* Amount */
 .amountLabel {
   font-size: 16px;
@@ -361,4 +372,77 @@
   white-space: pre-line;
   line-height: 1.4;
   pointer-events: none;
+}
+
+/* Success screen */
+@keyframes successPop {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.successWrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 20px;
+}
+
+.successCircle {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #34d399, #059669);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  animation: successPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.successAmount {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+.successText {
+  font-size: 16px;
+  color: rgba(255,255,255,0.5);
+  animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+}
+
+.successSub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+
+.successCommission {
+  font-size: 13px;
+  color: rgba(255,255,255,0.3);
+  animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+}
+
+.doneBtn {
+  margin-top: 32px;
+  background: #4a80f5;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 48px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+  animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both;
+}
+
+.doneBtn:active {
+  transform: scale(0.96);
+  background: #3b6fd6;
 }

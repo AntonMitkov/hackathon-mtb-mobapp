@@ -4,38 +4,44 @@ import { Smartphone, CircleDollarSign, HandCoins, Coins, QrCode, BookOpen, X } f
 
 const PAY_ITEMS = [
   {
+    id: 'mobilePayment',
     icon: <Smartphone size={24} color="#4a80f5" />,
     label: 'Мобильная связь',
     desc: 'Оплата услуг связи',
   },
   {
+    id: 'erip',
     icon: <CircleDollarSign size={24} color="#4a80f5" />,
     label: 'ЕРИП',
     desc: 'Оплата услуг в системе ЕРИП',
   },
   {
+    id: 'creditPayment',
     icon: <HandCoins size={24} color="#4a80f5" />,
     label: 'Погашение кредита',
     desc: 'Погашение активных кредитных обязательств',
   },
   {
+    id: 'customPayment',
     icon: <Coins size={24} color="#4a80f5" />,
     label: 'Произвольный платёж',
     desc: 'Оплата платежа через данные заказчика',
   },
   {
+    id: 'qrPayment',
     icon: <QrCode size={24} color="#4a80f5" />,
     label: 'QR оплата',
     desc: 'Оплата по скану QR кода',
   },
   {
+    id: 'templates',
     icon: <BookOpen size={24} color="#4a80f5" />,
     label: 'Шаблоны',
     desc: 'Управляйте своими шаблонами',
   },
 ]
 
-export default function PayBottomSheet({ onClose }) {
+export default function PayBottomSheet({ onClose, onItemClick }) {
   return createPortal(
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.sheet} onClick={(e) => e.stopPropagation()}>
@@ -50,7 +56,7 @@ export default function PayBottomSheet({ onClose }) {
 
         <div className={styles.list}>
           {PAY_ITEMS.map((item) => (
-            <button key={item.label} className={styles.item}>
+            <button key={item.id} className={styles.item} onClick={() => onItemClick?.(item.id)}>
               <div className={styles.iconWrap}>{item.icon}</div>
               <div className={styles.textWrap}>
                 <span className={styles.itemLabel}>{item.label}</span>

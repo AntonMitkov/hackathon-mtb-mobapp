@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import styles from './TopUpScreen.module.css'
-import { ChevronLeft, Camera } from 'lucide-react'
+import { ChevronLeft, Camera, Check } from 'lucide-react'
 
 const COMMISSION_RATE = 0.01 // 1%
 
@@ -13,6 +13,7 @@ export default function TopUpScreen({ onBack }) {
   const [expiry, setExpiry] = useState('')
   const [cvv, setCvv] = useState('')
   const [amount, setAmount] = useState('')
+  const [success, setSuccess] = useState(false)
 
   const commission = amount ? (parseFloat(amount) * COMMISSION_RATE).toFixed(2) : '0.00'
   const canSubmit = cardNum.replace(/\s/g, '').length === 16 && expiry.length === 5 && cvv.length === 3 && parseFloat(amount) > 0
@@ -61,10 +62,27 @@ export default function TopUpScreen({ onBack }) {
     const max = track ? track.clientWidth - 56 : 200
     if (swipeX > max * 0.75) {
       setSwipeX(max)
-      setTimeout(() => { setSwipeX(0); onBack() }, 600)
+      setTimeout(() => setSuccess(true), 400)
     } else {
       setSwipeX(0)
     }
+  }
+
+  if (success) {
+    return (
+      <div className={styles.screen}>
+        <div className={styles.successWrap}>
+          <div className={styles.successCircle}>
+            <Check size={48} color="#fff" strokeWidth={3} />
+          </div>
+          <span className={styles.successAmount}>{parseFloat(amount).toFixed(2)} BYN</span>
+          <span className={styles.successText}>Пополнение выполнено</span>
+          <span className={styles.successSub}>Карта Кактус BYN 5*4685</span>
+          <span className={styles.successCommission}>Комиссия: {commission} BYN</span>
+          <button className={styles.doneBtn} onClick={onBack}>Готово</button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -80,7 +98,11 @@ export default function TopUpScreen({ onBack }) {
         {/* From */}
         <div className={styles.sectionHeader}>
           <span className={styles.sectionLabel}>Откуда</span>
-          <button className={styles.cameraBtn}><Camera size={20} color="#fff" /></button>
+          <button className={styles.cameraBtn} onClick={() => {
+            setCardNum('4255 1234 5678 9012')
+            setExpiry('12/28')
+            setCvv('***')
+          }}><Camera size={20} color="#fff" /></button>
         </div>
 
         <div className={styles.cardForm}>
@@ -141,7 +163,13 @@ export default function TopUpScreen({ onBack }) {
           </div>
         </div>
 
-        <button className={styles.countriesLink}>Доступные страны для перевода</button>
+        <button className={styles.countriesLink} onClick={() => {
+          const el = document.getElementById('countriesInfo')
+          if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none'
+        }}>Доступные страны для перевода</button>
+        <div id="countriesInfo" className={styles.countriesInfo} style={{ display: 'none' }}>
+          Россия, Казахстан, Грузия, Армения, Узбекистан, Кыргызстан, Польша
+        </div>
 
         {/* Amount */}
         <div className={styles.amountLabel}>Сумма, BYN</div>

@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import styles from './FriendsScreen.module.css'
-import { ChevronLeft, Search, UserPlus, ArrowUpRight, Clock } from 'lucide-react'
+import { ChevronLeft, Search, UserPlus, ArrowUpRight, ArrowDownLeft, Users, Clock, Crown, Medal, Zap } from 'lucide-react'
 
 const FRIENDS = [
-  { id: 1, name: 'Егор Косенко',   avatar: '/assets/avatars/egor.jpeg',  phone: '+375 29 111-22-33', lastAmount: '25.00', lastDate: '21.04' },
-  { id: 2, name: 'Злата Рыбакова', avatar: '/assets/avatars/zlata.jpeg', phone: '+375 44 222-33-44', lastAmount: '50.00', lastDate: '18.04' },
-  { id: 3, name: 'Глеб Глебов',    avatar: '/assets/avatars/gleb.jpeg',  phone: '+375 33 333-44-55', lastAmount: '12.50', lastDate: '15.04' },
+  { id: 1, name: 'Егор Косенко',   avatar: '/assets/avatars/egor.jpeg',  phone: '+375 29 111-22-33', lastAmount: '25.00', lastDate: '21.04', hexLevel: 15, hexRank: 'gold', hexPts: 3800 },
+  { id: 2, name: 'Злата Рыбакова', avatar: '/assets/avatars/zlata.jpeg', phone: '+375 44 222-33-44', lastAmount: '50.00', lastDate: '18.04', hexLevel: 11, hexRank: 'silver', hexPts: 2900 },
+  { id: 3, name: 'Глеб Глебов',    avatar: '/assets/avatars/gleb.jpeg',  phone: '+375 33 333-44-55', lastAmount: '12.50', lastDate: '15.04', hexLevel: 8, hexRank: 'bronze', hexPts: 1850 },
 ]
 
 const HISTORY = [
@@ -16,9 +16,17 @@ const HISTORY = [
   { id: 5, friendId: 1, type: 'in',  amount: '15.00', date: '05 апр', comment: 'Кофе' },
 ]
 
-export default function FriendsScreen({ onBack }) {
+const RANK_ICON = {
+  gold: <Crown size={12} color="#f59e0b" />,
+  silver: <Medal size={12} color="#94a3b8" />,
+  bronze: <Medal size={12} color="#cd7f32" />,
+}
+const RANK_COLOR = { gold: '#f59e0b', silver: '#94a3b8', bronze: '#cd7f32' }
+
+export default function FriendsScreen({ onBack, onSendMoney, onRequestMoney, onSplitBill }) {
   const [query, setQuery] = useState('')
   const [activeTab, setActiveTab] = useState('friends')
+  const [showAddFriend, setShowAddFriend] = useState(false)
 
   const filtered = FRIENDS.filter(f =>
     f.name.toLowerCase().includes(query.toLowerCase()) ||
@@ -32,10 +40,17 @@ export default function FriendsScreen({ onBack }) {
           <ChevronLeft size={28} color="#3d8ef5" />
         </button>
         <span className={styles.topTitle}>Друзья</span>
-        <button className={styles.addBtn}>
+        <button className={styles.addBtn} onClick={() => setShowAddFriend(true)}>
           <UserPlus size={20} color="#4a80f5" />
         </button>
       </div>
+
+      {showAddFriend && (
+        <div className={styles.addFriendBanner}>
+          <span className={styles.addFriendText}>Поделитесь ссылкой с другом, чтобы добавить его</span>
+          <button className={styles.addFriendCloseBtn} onClick={() => setShowAddFriend(false)}>Понятно</button>
+        </div>
+      )}
 
       <div className={styles.tabs}>
         <button
@@ -46,6 +61,27 @@ export default function FriendsScreen({ onBack }) {
           className={`${styles.tab} ${activeTab === 'history' ? styles.tabActive : ''}`}
           onClick={() => setActiveTab('history')}
         >История</button>
+      </div>
+
+      <div className={styles.actionsRow}>
+        <button className={styles.actionBtn} onClick={() => onSendMoney?.()}>
+          <div className={styles.actionIcon}>
+            <ArrowUpRight size={20} color="#4a80f5" />
+          </div>
+          <span className={styles.actionLabel}>Перевести</span>
+        </button>
+        <button className={styles.actionBtn} onClick={onRequestMoney}>
+          <div className={`${styles.actionIcon} ${styles.actionIconGreen}`}>
+            <ArrowDownLeft size={20} color="#34d399" />
+          </div>
+          <span className={styles.actionLabel}>Запросить</span>
+        </button>
+        <button className={styles.actionBtn} onClick={onSplitBill}>
+          <div className={`${styles.actionIcon} ${styles.actionIconOrange}`}>
+            <Users size={20} color="#f59e0b" />
+          </div>
+          <span className={styles.actionLabel}>Split Bill</span>
+        </button>
       </div>
 
       {activeTab === 'friends' && (
@@ -66,8 +102,11 @@ export default function FriendsScreen({ onBack }) {
                 <span className={styles.sectionTitle}>Быстрый перевод</span>
                 <div className={styles.quickRow}>
                   {FRIENDS.map(f => (
-                    <button key={f.id} className={styles.quickItem}>
-                      <img src={f.avatar} className={styles.quickAvatar} alt={f.name} />
+                    <button key={f.id} className={styles.quickItem} onClick={() => onSendMoney?.(f.id)}>
+                      <div className={styles.quickAvatarWrap}>
+                        <img src={f.avatar} className={styles.quickAvatar} alt={f.name} />
+                        <div className={styles.quickLevel} style={{ background: RANK_COLOR[f.hexRank] }}>{f.hexLevel}</div>
+                      </div>
                       <span className={styles.quickName}>{f.name.split(' ')[0]}</span>
                     </button>
                   ))}
@@ -82,14 +121,24 @@ export default function FriendsScreen({ onBack }) {
               <div className={styles.list}>
                 {filtered.map((f, i) => (
                   <div key={f.id} className={styles.friendRow} style={{ animationDelay: `${i * 0.07}s` }}>
-                    <img src={f.avatar} className={styles.avatar} alt={f.name} />
+                    <div className={styles.avatarWrap}>
+                      <img src={f.avatar} className={styles.avatar} alt={f.name} />
+                      <div className={styles.avatarLevel} style={{ background: RANK_COLOR[f.hexRank] }}>{f.hexLevel}</div>
+                    </div>
                     <div className={styles.friendInfo}>
-                      <span className={styles.friendName}>{f.name}</span>
+                      <div className={styles.friendNameRow}>
+                        <span className={styles.friendName}>{f.name}</span>
+                        <span className={styles.hexBadge} style={{ color: RANK_COLOR[f.hexRank], background: `${RANK_COLOR[f.hexRank]}15` }}>
+                          {RANK_ICON[f.hexRank]}
+                          <span>{f.hexPts.toLocaleString()}</span>
+                          <Zap size={10} />
+                        </span>
+                      </div>
                       <span className={styles.friendPhone}>{f.phone}</span>
                     </div>
                     <div className={styles.friendRight}>
                       <span className={styles.lastDate}>{f.lastDate}</span>
-                      <button className={styles.sendBtn}>
+                      <button className={styles.sendBtn} onClick={() => onSendMoney?.(f.id)}>
                         <ArrowUpRight size={15} color="#4a80f5" />
                         <span>{f.lastAmount} BYN</span>
                       </button>

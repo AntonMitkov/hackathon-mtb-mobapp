@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styles from './Header.module.css'
 import { EyeOff, IconTopUp, IconTransfer, IconPay, IconGift } from './icons'
-import { Users } from 'lucide-react'
+import { Users, Eye } from 'lucide-react'
 
 export default function Header({ onCardClick, onTopUp, onTransfer, onPay, onPoints, onFriends, onProfile }) {
   const [balanceVisible, setBalanceVisible] = useState(true)
@@ -43,7 +43,10 @@ export default function Header({ onCardClick, onTopUp, onTransfer, onPay, onPoin
           onClick={(e) => { e.stopPropagation(); setBalanceVisible(v => !v) }}
           aria-label={balanceVisible ? 'Скрыть баланс' : 'Показать баланс'}
         >
-          <EyeOff size={26} color="rgba(255,255,255,0.65)" />
+          {balanceVisible
+            ? <Eye size={26} color="rgba(255,255,255,0.65)" />
+            : <EyeOff size={26} color="rgba(255,255,255,0.65)" />
+          }
         </button>
       </div>
 

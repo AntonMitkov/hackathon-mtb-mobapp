@@ -1,0 +1,49 @@
+@keyframes screenSlideIn {
+  from { transform: translateX(40px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes fadeInUp {
+  from { transform: translateY(12px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.screen {
+  max-width: 430px; margin: 0 auto; min-height: 100vh;
+  background: var(--dark-bg); display: flex; flex-direction: column;
+  animation: screenSlideIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.topBar { display: flex; align-items: center; gap: 12px; padding: 56px 20px 12px; flex-shrink: 0; }
+.backBtn { background: none; border: none; cursor: pointer; padding: 4px 8px 4px 0; display: flex; align-items: center; }
+.topTitle { flex: 1; font-size: 20px; font-weight: 600; color: #fff; }
+.unreadBadge {
+  background: #ef4444; color: #fff; font-size: 12px; font-weight: 700;
+  padding: 3px 10px; border-radius: 20px;
+}
+
+.scrollArea { flex: 1; overflow-y: auto; padding: 8px 0 40px; }
+
+.notifRow {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  position: relative;
+  animation: fadeInUp 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.notifUnread { background: rgba(74,128,245,0.04); }
+
+.notifIcon {
+  width: 38px; height: 38px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+.notifContent { flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.notifTitle { font-size: 14px; font-weight: 600; color: #fff; }
+.notifDesc { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.3; }
+.notifTime { font-size: 11px; color: rgba(255,255,255,0.25); margin-top: 2px; }
+
+.notifDot {
+  width: 8px; height: 8px; border-radius: 50%; background: #4a80f5;
+  flex-shrink: 0; margin-top: 6px;
+}

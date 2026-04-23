@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import styles from './PointsScreen.module.css'
-import { ChevronLeft, ListFilter, EyeOff, CreditCard, CheckSquare, Square } from 'lucide-react'
+import { ChevronLeft, ListFilter, EyeOff, CreditCard, CheckSquare, Square, Check } from 'lucide-react'
 
 const POINTS_BALANCE = 17.00
 
@@ -17,6 +17,7 @@ export default function PointsScreen({ onBack }) {
   const [selected, setSelected] = useState(new Set())
   const [hideUnavailable, setHideUnavailable] = useState(false)
   const [sortAsc, setSortAsc] = useState(false)
+  const [redeemed, setRedeemed] = useState(false)
 
   const toggle = (id) => {
     setSelected(prev => {
@@ -33,7 +34,25 @@ export default function PointsScreen({ onBack }) {
     .filter(o => selected.has(o.id))
     .reduce((sum, o) => sum + o.amount, 0)
 
-  const canUse = selected.size > 0 && selectedTotal <= POINTS_BALANCE * 100
+  const canUse = selected.size > 0 && selectedTotal <= POINTS_BALANCE
+
+  if (redeemed) {
+    return (
+      <div className={styles.screen}>
+        <div className={styles.successWrap}>
+          <div className={styles.successCircle}>
+            <Check size={48} color="#fff" strokeWidth={3} />
+          </div>
+          <span className={styles.successAmount}>{selectedTotal.toFixed(2)} BYN</span>
+          <span className={styles.successText}>Баллы использованы</span>
+          <span className={styles.successSub}>
+            Остаток: {(POINTS_BALANCE - selectedTotal).toFixed(2)} BYN
+          </span>
+          <button className={styles.doneBtn} onClick={onBack}>Готово</button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className={styles.screen}>
@@ -127,6 +146,7 @@ export default function PointsScreen({ onBack }) {
         <button
           className={`${styles.useBtn} ${canUse ? styles.useBtnActive : ''}`}
           disabled={!canUse}
+          onClick={() => canUse && setRedeemed(true)}
         >
           {canUse
             ? `Погасить ${selectedTotal.toFixed(2)} BYN баллами`

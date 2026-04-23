@@ -4,23 +4,26 @@ import { CreditCard, Smartphone, Zap, X } from 'lucide-react'
 
 const TRANSFER_ITEMS = [
   {
+    id: 'card',
     icon: <CreditCard size={24} color="#4a80f5" />,
     label: 'По номеру карты и счёта',
     desc: 'Переводы между картами и счетами',
   },
   {
+    id: 'phone',
     icon: <Smartphone size={24} color="#4a80f5" />,
     label: 'По номеру телефона',
     desc: 'Перевод клиентам МТБанка',
   },
   {
+    id: 'instant',
     icon: <Zap size={24} color="#4a80f5" />,
     label: 'Мгновенный платёж',
     desc: 'Перевод по системе СМП',
   },
 ]
 
-export default function TransferBottomSheet({ onClose }) {
+export default function TransferBottomSheet({ onClose, onItemClick }) {
   return createPortal(
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.sheet} onClick={(e) => e.stopPropagation()}>
@@ -35,7 +38,7 @@ export default function TransferBottomSheet({ onClose }) {
 
         <div className={styles.list}>
           {TRANSFER_ITEMS.map((item) => (
-            <button key={item.label} className={styles.item}>
+            <button key={item.id} className={styles.item} onClick={() => onItemClick?.(item.id)}>
               <div className={styles.iconWrap}>{item.icon}</div>
               <div className={styles.textWrap}>
                 <span className={styles.itemLabel}>{item.label}</span>
