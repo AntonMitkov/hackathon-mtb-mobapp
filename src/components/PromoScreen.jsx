@@ -1,40 +1,37 @@
 import { useState } from 'react'
 import styles from './PromoScreen.module.css'
-import { ChevronLeft, Copy, Check, Share2, Gift, Crown, Users } from 'lucide-react'
+import { ChevronLeft, Share2, Crown, Medal, Users, TrendingUp } from 'lucide-react'
 
-const PROMO = {
-  code: 'CACTUS-ANTON-7X',
-  pointName: 'Green Cafe',
-  rank: 'Gold',
-  cashbackForFriend: '15%',
-  rewardForYou: '+100 pts',
-  usedCount: 1,
-  maxUses: 5,
-}
-
-const REFERRALS = [
-  { id: 1, name: 'Маша К.', date: '20 апреля', reward: '+100 pts', status: 'done' },
+const CAPTURED_CASHBACK = [
+  { id: 1, name: 'Green Cafe', cat: 'Кафе', rank: 'gold', cashbackPct: 10, earnedBYN: 12.40, shared: false },
+  { id: 2, name: 'PizzaHut', cat: 'Кафе', rank: 'silver', cashbackPct: 5, earnedBYN: 6.80, shared: true, sharedWith: 'Маша К.' },
+  { id: 3, name: 'CoffeeBreak', cat: 'Кафе', rank: 'bronze', cashbackPct: 3, earnedBYN: 2.10, shared: false },
 ]
 
-export default function PromoScreen({ onBack }) {
-  const [copied, setCopied] = useState(false)
+const SHARE_HISTORY = [
+  { id: 1, friend: 'Маша К.', point: 'PizzaHut', cashback: '5%', date: '20 апреля', status: 'active' },
+]
 
-  const handleCopy = () => {
-    navigator.clipboard?.writeText(PROMO.code)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+const RANK_COLOR = { gold: '#f59e0b', silver: '#94a3b8', bronze: '#cd7f32' }
+const RANK_LABEL = { gold: 'Gold', silver: 'Silver', bronze: 'Bronze' }
 
-  const handleShare = async () => {
+const totalCashback = CAPTURED_CASHBACK.reduce((sum, p) => sum + p.earnedBYN, 0).toFixed(2)
+
+export default function BonusesScreen({ onBack }) {
+  const [shared, setShared] = useState(
+    Object.fromEntries(CAPTURED_CASHBACK.map(p => [p.id, p.shared ? p.sharedWith : null]))
+  )
+
+  const handleShare = async (point) => {
+    const text = `Хочу поделиться кэшбэком ${point.cashbackPct}% в ${point.name} с тобой! Скачай MTBank и получи бонус.`
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: 'MTBank Отжималка',
-          text: `Оформи карту MTBank по моему промокоду ${PROMO.code} и получи ${PROMO.cashbackForFriend} кэшбэк в ${PROMO.pointName}!`,
-        })
+        await navigator.share({ title: 'MTBank Бонусы', text })
+        setShared(prev => ({ ...prev, [point.id]: 'Друг' }))
       } catch { /* cancelled */ }
     } else {
-      handleCopy()
+      navigator.clipboard?.writeText(text)
+      setShared(prev => ({ ...prev, [point.id]: 'Друг' }))
     }
   }
 
@@ -44,61 +41,59 @@ export default function PromoScreen({ onBack }) {
         <button className={styles.backBtn} onClick={onBack}>
           <ChevronLeft size={28} color="#3d8ef5" />
         </button>
-        <span className={styles.topTitle}>Промокод</span>
+        <span className={styles.topTitle}>Бонусы</span>
       </div>
 
       <div className={styles.scrollArea}>
         <div className={styles.heroCard}>
           <div className={styles.heroIcon}>
-            <Crown size={28} color="#f59e0b" />
+            <TrendingUp size={28} color="#34d399" />
           </div>
-          <span className={styles.heroTitle}>Ты Gold в {PROMO.pointName}!</span>
-          <span className={styles.heroDesc}>Приглашай друзей — они получат кэшбэк, а ты очки influence</span>
+          <span className={styles.totalAmount}>{totalCashback} BYN</span>
+          <span className={styles.heroTitle}>Кэшбэк с захваченных точек</span>
+          <span className={styles.heroDesc}>Делись кэшбэком с друзьями — они получат бонус при оплате</span>
         </div>
 
-        <div className={styles.codeCard}>
-          <span className={styles.codeLabel}>Твой промокод</span>
-          <div className={styles.codeRow}>
-            <span className={styles.codeText}>{PROMO.code}</span>
-            <button className={styles.copyBtn} onClick={handleCopy}>
-              {copied ? <Check size={18} color="#34d399" /> : <Copy size={18} color="#4a80f5" />}
-            </button>
-          </div>
-          <div className={styles.codeInfo}>
-            <div className={styles.codeInfoItem}>
-              <Gift size={14} color="#34d399" />
-              <span>Другу: {PROMO.cashbackForFriend} кэшбэк</span>
+        <div className={styles.section}>
+          <span className={styles.sectionTitle}>Мои точки</span>
+          {CAPTURED_CASHBACK.map((point, i) => (
+            <div key={point.id} className={styles.pointCard} style={{ animationDelay: `${i * 0.06 + 0.1}s` }}>
+              <div className={styles.pointRankIcon} style={{ background: `${RANK_COLOR[point.rank]}20`, borderColor: `${RANK_COLOR[point.rank]}40` }}>
+                {point.rank === 'gold'
+                  ? <Crown size={16} color={RANK_COLOR[point.rank]} />
+                  : <Medal size={16} color={RANK_COLOR[point.rank]} />
+                }
+              </div>
+              <div className={styles.pointDetails}>
+                <span className={styles.pointName}>{point.name}</span>
+                <span className={styles.pointMeta}>{point.cat} · {RANK_LABEL[point.rank]}</span>
+                <span className={styles.pointEarned}>+{point.earnedBYN.toFixed(2)} BYN заработано</span>
+              </div>
+              <div className={styles.pointRight}>
+                <span className={styles.pointCashback}>{point.cashbackPct}%</span>
+                {shared[point.id] ? (
+                  <span className={styles.sharedLabel}>{shared[point.id]}</span>
+                ) : (
+                  <button className={styles.sharePointBtn} onClick={() => handleShare(point)}>
+                    <Share2 size={16} color="#4a80f5" />
+                  </button>
+                )}
+              </div>
             </div>
-            <div className={styles.codeInfoItem}>
-              <Crown size={14} color="#f59e0b" />
-              <span>Тебе: {PROMO.rewardForYou}</span>
-            </div>
-          </div>
-          <div className={styles.usesBar}>
-            <span className={styles.usesLabel}>Использовано</span>
-            <span className={styles.usesCount}>{PROMO.usedCount} / {PROMO.maxUses}</span>
-          </div>
-          <div className={styles.usesTrack}>
-            <div className={styles.usesFill} style={{ width: `${(PROMO.usedCount / PROMO.maxUses) * 100}%` }} />
-          </div>
+          ))}
         </div>
 
-        <button className={styles.shareBtn} onClick={handleShare}>
-          <Share2 size={18} />
-          <span>Поделиться промокодом</span>
-        </button>
-
-        {REFERRALS.length > 0 && (
+        {SHARE_HISTORY.length > 0 && (
           <div className={styles.section}>
-            <span className={styles.sectionTitle}>Приглашённые друзья</span>
-            {REFERRALS.map(r => (
+            <span className={styles.sectionTitle}>Отправленный кэшбэк</span>
+            {SHARE_HISTORY.map(r => (
               <div key={r.id} className={styles.refRow}>
                 <Users size={16} color="#4a80f5" />
                 <div className={styles.refInfo}>
-                  <span className={styles.refName}>{r.name}</span>
-                  <span className={styles.refDate}>{r.date}</span>
+                  <span className={styles.refName}>{r.friend}</span>
+                  <span className={styles.refDate}>{r.point} · {r.date}</span>
                 </div>
-                <span className={styles.refReward}>{r.reward}</span>
+                <span className={styles.refReward}>{r.cashback}</span>
               </div>
             ))}
           </div>

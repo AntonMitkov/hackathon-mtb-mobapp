@@ -26,6 +26,7 @@ import ClanScreen from './components/ClanScreen'
 import MysteryBoxScreen from './components/MysteryBoxScreen'
 import HexNotificationsScreen from './components/HexNotificationsScreen'
 import PromoScreen from './components/PromoScreen'
+import BonusesBanner from './components/BonusesBanner'
 import StoryScreen from './components/StoryScreen'
 import styles from './App.module.css'
 
@@ -50,6 +51,8 @@ export default function App() {
   const [featureBack, setFeatureBack] = useState('home')
   const [preselectedFriend, setPreselectedFriend] = useState(null)
   const [storyTx, setStoryTx] = useState(null)
+  const [homeTxPhoto, setHomeTxPhoto] = useState(null)
+  const [promoBack, setPromoBack] = useState('home')
 
   const handleTabChange = (tab) => {
     setActiveTab(tab)
@@ -86,6 +89,8 @@ export default function App() {
       onBack={() => setShowTxDetail(false)}
       onSplitBill={() => { setShowTxDetail(false); setScreen('splitBill') }}
       onStory={(tx) => { setShowTxDetail(false); setStoryTx(tx); setScreen('story') }}
+      photo={homeTxPhoto}
+      onPhotoChange={(_, url) => setHomeTxPhoto(url)}
     />
   )
 
@@ -105,7 +110,7 @@ export default function App() {
       onClan={() => setScreen('clan')}
       onBoosts={() => setScreen('hex')}
       onMysteryBox={() => setScreen('mysteryBox')}
-      onPromo={() => setScreen('promo')}
+      onPromo={() => { setPromoBack('hex'); setScreen('promo') }}
     />
   )
 
@@ -119,7 +124,7 @@ export default function App() {
   if (screen === 'clan') return <ClanScreen onBack={() => setScreen('hex')} />
   if (screen === 'mysteryBox') return <MysteryBoxScreen onBack={() => setScreen('hex')} />
   if (screen === 'hexNotifications') return <HexNotificationsScreen onBack={() => setScreen('profile')} />
-  if (screen === 'promo') return <PromoScreen onBack={() => setScreen('hex')} />
+  if (screen === 'promo') return <PromoScreen onBack={() => setScreen(promoBack)} />
 
   if (screen === 'feature') return (
     <FeatureScreen
@@ -204,6 +209,7 @@ export default function App() {
           amount="-9.79"
           onClick={() => setShowTxDetail(true)}
         />
+        <BonusesBanner onClick={() => { setPromoBack('home'); setScreen('promo') }} />
         <ExchangeBanner onClick={() => openFeature('mobyExchange', 'home')} />
         <ServiceBanner onClick={() => {
           setActiveTab('products')

@@ -23,73 +23,72 @@
 .scrollArea { flex: 1; overflow-y: auto; padding: 0 20px 40px; }
 
 .heroCard {
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  padding: 28px 20px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 28px 20px 24px; text-align: center;
   animation: scaleIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
 }
 
 .heroIcon {
   width: 64px; height: 64px; border-radius: 50%;
-  background: rgba(245,158,11,0.12); border: 2px solid rgba(245,158,11,0.25);
+  background: rgba(52, 211, 153, 0.12); border: 2px solid rgba(52, 211, 153, 0.25);
   display: flex; align-items: center; justify-content: center;
+  margin-bottom: 4px;
 }
 
-.heroTitle { font-size: 18px; font-weight: 700; color: #fff; }
-.heroDesc { font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.4; }
+.totalAmount {
+  font-size: 36px; font-weight: 800; color: #34d399;
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
 
-.codeCard {
-  background: #1c1f2e; border-radius: 16px; padding: 20px;
-  margin-bottom: 16px;
+.heroTitle { font-size: 16px; font-weight: 600; color: #fff; }
+.heroDesc { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.4; max-width: 260px; }
+
+.section {
+  margin-bottom: 20px;
   animation: fadeInUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
 }
 
-.codeLabel { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.5px; }
-
-.codeRow {
-  display: flex; align-items: center; justify-content: space-between;
-  margin: 10px 0 14px;
-}
-
-.codeText {
-  font-size: 22px; font-weight: 700; color: #fff; letter-spacing: 2px;
-  font-variant-numeric: tabular-nums;
-}
-
-.copyBtn {
-  background: rgba(74,128,245,0.12); border: none; border-radius: 10px;
-  width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-}
-
-.codeInfo {
-  display: flex; flex-direction: column; gap: 8px;
-  padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);
-  margin-bottom: 14px;
-}
-
-.codeInfoItem { display: flex; align-items: center; gap: 8px; font-size: 14px; color: rgba(255,255,255,0.6); }
-
-.usesBar { display: flex; justify-content: space-between; margin-bottom: 6px; }
-.usesLabel { font-size: 12px; color: rgba(255,255,255,0.35); }
-.usesCount { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.6); }
-
-.usesTrack { height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
-.usesFill { height: 100%; background: #4a80f5; border-radius: 2px; transition: width 0.5s; }
-
-.shareBtn {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  width: 100%; padding: 14px; background: #4a80f5; border: none; border-radius: 14px;
-  font-size: 15px; font-weight: 600; color: #fff; cursor: pointer;
-  margin-bottom: 24px; transition: transform 0.15s;
-  animation: fadeInUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
-}
-
-.shareBtn:active { transform: scale(0.97); }
-
-.section { animation: fadeInUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both; }
 .sectionTitle {
   font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.4);
   text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 12px;
+}
+
+.pointCard {
+  display: flex; align-items: center; gap: 12px;
+  background: #1c1f2e; border-radius: 14px; padding: 14px;
+  margin-bottom: 8px;
+  animation: fadeInUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.pointRankIcon {
+  flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%;
+  border: 1.5px solid; display: flex; align-items: center; justify-content: center;
+}
+
+.pointDetails { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.pointName { font-size: 14px; font-weight: 600; color: #fff; }
+.pointMeta { font-size: 12px; color: rgba(255,255,255,0.35); }
+.pointEarned { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+.pointRight {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+
+.pointCashback {
+  font-size: 16px; font-weight: 800; color: #34d399;
+  font-variant-numeric: tabular-nums;
+}
+
+.sharePointBtn {
+  background: rgba(74,128,245,0.12); border: none; border-radius: 10px;
+  width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: transform 0.15s;
+}
+.sharePointBtn:active { transform: scale(0.9); }
+
+.sharedLabel {
+  font-size: 11px; color: #34d399; font-weight: 600;
+  background: rgba(52,211,153,0.1); padding: 3px 8px; border-radius: 20px;
 }
 
 .refRow {

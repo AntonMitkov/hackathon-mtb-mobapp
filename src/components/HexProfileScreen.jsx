@@ -130,7 +130,7 @@ export default function HexProfileScreen({ onBack, onChallenges, onClan, onBoost
             <div className={styles.quickIcon} style={{ background: 'rgba(16,185,129,0.12)' }}>
               <Star size={20} color="#10b981" />
             </div>
-            <span>Промокод</span>
+            <span>Бонусы</span>
           </button>
         </div>
 

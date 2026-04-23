@@ -200,6 +200,34 @@
   cursor: pointer;
 }
 
+/* Confirm photo button */
+.confirmBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  background: #4a80f5;
+  border: none;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s, opacity 0.15s;
+}
+
+.confirmBtn:active {
+  transform: scale(0.97);
+}
+
+.confirmBtn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 /* Actions */
 .actionsRow {
   display: flex;

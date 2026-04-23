@@ -7,6 +7,7 @@ import TransferBottomSheet from './TransferBottomSheet'
 import PointsScreen from './PointsScreen'
 import TopUpScreen from './TopUpScreen'
 import TransactionDetailScreen from './TransactionDetailScreen'
+import StoryScreen from './StoryScreen'
 
 const TABS = ['Настройки', 'История', 'Информация']
 
@@ -52,8 +53,11 @@ export default function CardDetailScreen({ onBack, onFeature }) {
   const [showPoints, setShowPoints] = useState(false)
   const [showTopUp, setShowTopUp] = useState(false)
   const [selectedTx, setSelectedTx] = useState(null)
+  const [txPhotos, setTxPhotos] = useState({})
+  const [storyTx, setStoryTx] = useState(null)
 
   const flip = (key) => setToggles(t => ({ ...t, [key]: !t[key] }))
+  const handlePhotoChange = (txId, url) => setTxPhotos(prev => ({ ...prev, [txId]: url }))
 
   if (showTopUp) {
     return <TopUpScreen onBack={() => setShowTopUp(false)} />
@@ -63,8 +67,20 @@ export default function CardDetailScreen({ onBack, onFeature }) {
     return <PointsScreen onBack={() => setShowPoints(false)} />
   }
 
+  if (storyTx) {
+    return <StoryScreen tx={storyTx} onBack={() => setStoryTx(null)} />
+  }
+
   if (selectedTx) {
-    return <TransactionDetailScreen tx={selectedTx} onBack={() => setSelectedTx(null)} />
+    return (
+      <TransactionDetailScreen
+        tx={selectedTx}
+        onBack={() => setSelectedTx(null)}
+        photo={txPhotos[selectedTx.id] ?? null}
+        onPhotoChange={handlePhotoChange}
+        onStory={(tx) => { setSelectedTx(null); setStoryTx(tx) }}
+      />
+    )
   }
 
   return (
@@ -123,23 +139,31 @@ export default function CardDetailScreen({ onBack, onFeature }) {
 
         {activeTab === 1 && (
           <div className={styles.txList}>
-            {TRANSACTIONS.map(tx => (
-              <button key={tx.id} className={styles.txRow} onClick={() => setSelectedTx(tx)}>
-                <div className={styles.txIconWrap}>
-                  <IconCard size={20} color="rgba(255,255,255,0.85)" />
-                  <div className={styles.txClock}>
-                    <IconClock size={11} color="rgba(255,255,255,0.45)" />
+            {TRANSACTIONS.map(tx => {
+              const photoUrl = txPhotos[tx.id]
+              if (photoUrl) {
+                return (
+                  <button key={tx.id} className={styles.txPhotoCard} onClick={() => setSelectedTx(tx)}>
+                    <img src={photoUrl} className={styles.txPhotoImg} alt="" />
+                    <div className={styles.txPhotoOverlay}>
+                      <span className={styles.txPhotoMerchant}>{tx.merchant}</span>
+                      <span className={styles.txPhotoAmount}>{tx.amount}</span>
+                    </div>
+                  </button>
+                )
+              }
+              return (
+                <button key={tx.id} className={styles.txRow} onClick={() => setSelectedTx(tx)}>
+                  <div className={styles.txDetails}>
+                    <div className={styles.txMerchant}>{tx.merchant}</div>
+                    <div className={styles.txDate}>{tx.type}</div>
                   </div>
-                </div>
-                <div className={styles.txDetails}>
-                  <div className={styles.txMerchant}>{tx.merchant}</div>
-                  <div className={styles.txDate}>{tx.date}</div>
-                </div>
-                <div className={`${styles.txAmount} ${tx.amount.startsWith('+') ? styles.txPlus : ''}`}>
-                  {tx.amount}
-                </div>
-              </button>
-            ))}
+                  <div className={`${styles.txAmount} ${tx.amount.startsWith('+') ? styles.txPlus : ''}`}>
+                    {tx.amount}
+                  </div>
+                </button>
+              )
+            })}
           </div>
         )}
 
