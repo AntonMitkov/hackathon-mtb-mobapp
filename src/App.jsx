@@ -28,7 +28,32 @@ import HexNotificationsScreen from './components/HexNotificationsScreen'
 import PromoScreen from './components/PromoScreen'
 import BonusesBanner from './components/BonusesBanner'
 import StoryScreen from './components/StoryScreen'
+import CustomizationScreen from './components/CustomizationScreen'
+import { ACHIEVEMENTS } from './data/achievements'
 import styles from './App.module.css'
+
+const CUSTOMIZATIONS = {
+  cardDesigns: [
+    { id: 'default', label: 'Кактус (стандарт)', src: '/assets/card.png', achievementId: null },
+    { id: 'card1', label: 'Геометрия', src: '/assets/cards/card1.png', achievementId: 1 },
+    { id: 'card2', label: 'Стрик Огонь', src: '/assets/cards/card2.png', achievementId: 2 },
+    { id: 'card3', label: 'Топ-50 Купюра', src: '/assets/cards/card3.png', achievementId: 4 },
+  ],
+  avatarBorders: [
+    { id: 'default', label: 'Стандарт', style: { border: '3px solid rgba(74,128,245,0.4)' }, achievementId: null },
+    { id: 'gold', label: 'Золотая', style: { border: '3px solid #f59e0b', boxShadow: '0 0 12px rgba(245,158,11,0.5)' }, achievementId: 1 },
+    { id: 'fire', label: 'Огненная', style: { border: '3px solid #ef4444', boxShadow: '0 0 12px rgba(239,68,68,0.5)' }, achievementId: 2 },
+    { id: 'elite', label: 'Элитная', style: { border: '3px solid #8b5cf6', boxShadow: '0 0 12px rgba(139,92,246,0.5)' }, achievementId: 4 },
+    { id: 'mystery', label: 'Mystery', style: { border: '3px solid #ec4899', boxShadow: '0 0 12px rgba(236,72,153,0.5)' }, achievementId: 6 },
+  ],
+  profileEmojis: [
+    { id: 'none', label: 'Без эмодзи', emoji: null, achievementId: null },
+    { id: 'crown', label: 'Корона', emoji: '👑', achievementId: 1 },
+    { id: 'fire', label: 'Огонь', emoji: '🔥', achievementId: 2 },
+    { id: 'trophy', label: 'Кубок', emoji: '🏆', achievementId: 4 },
+    { id: 'gift', label: 'Подарок', emoji: '🎁', achievementId: 6 },
+  ],
+}
 
 const HOME_TX = {
   merchant: '"PEREKRESTOK CENTROPOL',
@@ -53,6 +78,14 @@ export default function App() {
   const [storyTx, setStoryTx] = useState(null)
   const [homeTxPhoto, setHomeTxPhoto] = useState(null)
   const [promoBack, setPromoBack] = useState('home')
+
+  const [selectedCardDesign, setSelectedCardDesign] = useState('default')
+  const [selectedAvatarBorder, setSelectedAvatarBorder] = useState('default')
+  const [selectedEmoji, setSelectedEmoji] = useState('none')
+
+  const cardImageSrc = CUSTOMIZATIONS.cardDesigns.find(c => c.id === selectedCardDesign)?.src || '/assets/card.png'
+  const avatarBorderStyle = CUSTOMIZATIONS.avatarBorders.find(b => b.id === selectedAvatarBorder)?.style || {}
+  const profileEmoji = CUSTOMIZATIONS.profileEmojis.find(e => e.id === selectedEmoji)?.emoji || null
 
   const handleTabChange = (tab) => {
     setActiveTab(tab)
@@ -103,6 +136,20 @@ export default function App() {
   )
 
   // HEX Game screens
+  if (screen === 'customization') return (
+    <CustomizationScreen
+      onBack={() => setScreen('hex')}
+      achievements={ACHIEVEMENTS}
+      customizations={CUSTOMIZATIONS}
+      selectedCardDesign={selectedCardDesign}
+      setSelectedCardDesign={setSelectedCardDesign}
+      selectedAvatarBorder={selectedAvatarBorder}
+      setSelectedAvatarBorder={setSelectedAvatarBorder}
+      selectedEmoji={selectedEmoji}
+      setSelectedEmoji={setSelectedEmoji}
+    />
+  )
+
   if (screen === 'hex') return (
     <HexProfileScreen
       onBack={() => setScreen('profile')}
@@ -111,6 +158,9 @@ export default function App() {
       onBoosts={() => setScreen('hex')}
       onMysteryBox={() => setScreen('mysteryBox')}
       onPromo={() => { setPromoBack('hex'); setScreen('promo') }}
+      onCustomization={() => setScreen('customization')}
+      avatarBorderStyle={avatarBorderStyle}
+      profileEmoji={profileEmoji}
     />
   )
 
@@ -137,6 +187,7 @@ export default function App() {
     <CardDetailScreen
       onBack={() => setScreen('home')}
       onFeature={(id) => openFeature(id, 'card')}
+      cardImageSrc={cardImageSrc}
     />
   )
   if (screen === 'topup') return <TopUpScreen onBack={() => setScreen('home')} />
@@ -167,6 +218,8 @@ export default function App() {
       onFeature={(id) => openFeature(id, 'profile')}
       onHex={() => setScreen('hex')}
       onHexNotifications={() => setScreen('hexNotifications')}
+      avatarBorderStyle={avatarBorderStyle}
+      profileEmoji={profileEmoji}
     />
   )
 
@@ -201,6 +254,8 @@ export default function App() {
         onPoints={() => setScreen('points')}
         onFriends={() => setScreen('friends')}
         onProfile={() => setScreen('profile')}
+        avatarBorderStyle={avatarBorderStyle}
+        profileEmoji={profileEmoji}
       />
       <div className={styles.content}>
         <TransactionItem

@@ -45,7 +45,7 @@ const CARD_INFO = [
   { label: 'Пакет услуг', value: 'Simple' },
 ]
 
-export default function CardDetailScreen({ onBack, onFeature }) {
+export default function CardDetailScreen({ onBack, onFeature, cardImageSrc = '/assets/card.png' }) {
   const [activeTab, setActiveTab] = useState(0)
   const [toggles, setToggles] = useState({ blocked: false, sms: false, phone: true })
   const [showPay, setShowPay] = useState(false)
@@ -94,7 +94,7 @@ export default function CardDetailScreen({ onBack, onFeature }) {
 
       <div className={styles.scrollArea}>
         <div className={styles.cardWrap}>
-          <CactusCard />
+          <CactusCard cardImageSrc={cardImageSrc} />
         </div>
 
         <div className={styles.actions}>
@@ -224,7 +224,7 @@ function Toggle({ on, onToggle }) {
   )
 }
 
-function CactusCard() {
+function CactusCard({ cardImageSrc = '/assets/card.png' }) {
   const [flipped, setFlipped] = useState(false)
 
   return (
@@ -233,7 +233,7 @@ function CactusCard() {
 
         {/* Front */}
         <div className={styles.cardFace}>
-          <img src="/assets/card.png" className={styles.cardBg} alt="" aria-hidden="true" />
+          <img src={cardImageSrc} className={styles.cardBg} alt="" aria-hidden="true" />
           <div className={styles.cardTop}>
             <span className={styles.cardName}>КАКТУС BYN</span>
             <div className={styles.cardTopIcons}>
@@ -263,7 +263,7 @@ function CactusCard() {
 
         {/* Back */}
         <div className={`${styles.cardFace} ${styles.cardBack}`}>
-          <img src="/assets/card.png" className={styles.cardBg} alt="" aria-hidden="true" />
+          <img src={cardImageSrc} className={styles.cardBg} alt="" aria-hidden="true" />
           <div className={styles.cardBackStripe} />
           <div className={styles.cardBackContent}>
             <div className={styles.cardBackLabel}>Номер карты</div>

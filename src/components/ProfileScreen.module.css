@@ -95,6 +95,16 @@
   color: #4a80f5;
 }
 
+/* Emoji badge on avatar */
+.emojiBadge {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  font-size: 20px;
+  line-height: 1;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.6));
+}
+
 /* HEX level badge on avatar */
 .hexLevelBadge {
   position: absolute;
@@ -313,12 +323,28 @@
   align-items: center;
 }
 
+.friendAvatarWrap {
+  position: relative;
+  display: inline-block;
+}
+
 .friendAvatar {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #1c1f2e;
+  display: block;
+}
+
+.friendAvatarEmoji {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  font-size: 11px;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8));
+  pointer-events: none;
 }
 
 /* Menu groups */

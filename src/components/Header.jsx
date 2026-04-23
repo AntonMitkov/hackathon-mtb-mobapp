@@ -3,7 +3,7 @@ import styles from './Header.module.css'
 import { EyeOff, IconTopUp, IconTransfer, IconPay, IconGift } from './icons'
 import { Users, Eye } from 'lucide-react'
 
-export default function Header({ onCardClick, onTopUp, onTransfer, onPay, onPoints, onFriends, onProfile }) {
+export default function Header({ onCardClick, onTopUp, onTransfer, onPay, onPoints, onFriends, onProfile, avatarBorderStyle = {}, profileEmoji = null }) {
   const [balanceVisible, setBalanceVisible] = useState(true)
 
   return (
@@ -14,7 +14,8 @@ export default function Header({ onCardClick, onTopUp, onTransfer, onPay, onPoin
           onClick={(e) => { e.stopPropagation(); onProfile?.() }}
           aria-label="Профиль"
         >
-          <img src="/assets/avatars/anton.jpeg" className={styles.avatarPhoto} alt="Антон" />
+          <img src="/assets/avatars/anton.jpeg" className={styles.avatarPhoto} style={avatarBorderStyle} alt="Антон" />
+          {profileEmoji && <span className={styles.emojiBadge}>{profileEmoji}</span>}
           <div className={styles.notifDot}>1</div>
         </button>
         <span className={styles.username}>Антон</span>

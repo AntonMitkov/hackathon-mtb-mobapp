@@ -12,10 +12,10 @@ const CLAN = {
 }
 
 const MEMBERS = [
-  { id: 1, name: 'Антон',  avatar: '/assets/avatars/anton.jpeg', pts: 4250, rank: 1, title: 'Лидер', color: '#f59e0b' },
-  { id: 2, name: 'Егор',   avatar: '/assets/avatars/egor.jpeg',  pts: 3800, rank: 2, title: 'Офицер', color: '#94a3b8' },
-  { id: 3, name: 'Злата',  avatar: '/assets/avatars/zlata.jpeg', pts: 2900, rank: 3, title: 'Офицер', color: '#cd7f32' },
-  { id: 4, name: 'Глеб',   avatar: '/assets/avatars/gleb.jpeg',  pts: 1850, rank: 4, title: 'Боец', color: '#4a80f5' },
+  { id: 1, name: 'Антон',  avatar: '/assets/avatars/anton.jpeg', pts: 4250, rank: 1, title: 'Лидер',  color: '#f59e0b', emoji: null,  borderStyle: { border: '2.5px solid #f59e0b', boxShadow: '0 0 8px rgba(245,158,11,0.55)' } },
+  { id: 2, name: 'Егор',   avatar: '/assets/avatars/egor.jpeg',  pts: 3800, rank: 2, title: 'Офицер', color: '#94a3b8', emoji: '👑',  borderStyle: { border: '2.5px solid #f59e0b', boxShadow: '0 0 8px rgba(245,158,11,0.55)' } },
+  { id: 3, name: 'Злата',  avatar: '/assets/avatars/zlata.jpeg', pts: 2900, rank: 3, title: 'Офицер', color: '#cd7f32', emoji: '⭐', borderStyle: { border: '2.5px solid #94a3b8', boxShadow: '0 0 8px rgba(148,163,184,0.45)' } },
+  { id: 4, name: 'Глеб',   avatar: '/assets/avatars/gleb.jpeg',  pts: 1850, rank: 4, title: 'Боец',   color: '#4a80f5', emoji: null,  borderStyle: { border: '2.5px solid #cd7f32', boxShadow: '0 0 8px rgba(205,127,50,0.45)' } },
 ]
 
 const CLAN_RANKING = [
@@ -76,7 +76,10 @@ export default function ClanScreen({ onBack }) {
             {MEMBERS.map((m, i) => (
               <div key={m.id} className={styles.memberRow} style={{ animationDelay: `${i * 0.06}s` }}>
                 <span className={styles.memberRank} style={{ color: m.color }}>#{m.rank}</span>
-                <img src={m.avatar} className={styles.memberAvatar} alt="" />
+                <div className={styles.memberAvatarWrap}>
+                  <img src={m.avatar} className={styles.memberAvatar} style={m.borderStyle} alt="" />
+                  {m.emoji && <span className={styles.memberEmoji}>{m.emoji}</span>}
+                </div>
                 <div className={styles.memberInfo}>
                   <span className={styles.memberName}>{m.name}</span>
                   <span className={styles.memberTitle} style={{ color: m.color }}>{m.title}</span>

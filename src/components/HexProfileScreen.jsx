@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styles from './HexProfileScreen.module.css'
-import { ChevronLeft, ChevronRight, Zap, Shield, Eye, Flame, Trophy, Crown, Medal, Star, Gift, Target, Lock, Snowflake } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Zap, Shield, Eye, Flame, Trophy, Crown, Medal, Star, Gift, Target, Lock, Snowflake, Palette } from 'lucide-react'
+import { ACHIEVEMENTS } from '../data/achievements'
 
 const PLAYER = {
   name: 'Антон',
@@ -28,19 +29,19 @@ const BOOSTS = [
   { id: 'radar', icon: <Eye size={20} />, name: 'Radar', desc: 'Слабые точки', count: 1, color: '#10b981' },
 ]
 
-const ACHIEVEMENTS = [
-  { id: 1, icon: <Crown size={18} />, name: 'Первый Gold', done: true, color: '#f59e0b' },
-  { id: 2, icon: <Flame size={18} />, name: 'Стрик 7 дней', done: true, color: '#ef4444' },
-  { id: 3, icon: <Target size={18} />, name: '5 точек', done: false, color: '#8b5cf6', progress: '3/5' },
-  { id: 4, icon: <Trophy size={18} />, name: 'Топ-50', done: true, color: '#4a80f5' },
-  { id: 5, icon: <Star size={18} />, name: 'Мастер кафе', done: false, color: '#10b981', progress: '2/3' },
-  { id: 6, icon: <Gift size={18} />, name: 'Mystery Box', done: true, color: '#ec4899' },
-]
+const ACHIEVEMENT_ICONS = {
+  1: <Crown size={18} />,
+  2: <Flame size={18} />,
+  3: <Target size={18} />,
+  4: <Trophy size={18} />,
+  5: <Star size={18} />,
+  6: <Gift size={18} />,
+}
 
 const RANK_LABEL = { gold: 'Gold', silver: 'Silver', bronze: 'Bronze' }
 const RANK_COLOR = { gold: '#f59e0b', silver: '#94a3b8', bronze: '#cd7f32' }
 
-export default function HexProfileScreen({ onBack, onChallenges, onClan, onBoosts, onMysteryBox, onPromo }) {
+export default function HexProfileScreen({ onBack, onChallenges, onClan, onBoosts, onMysteryBox, onPromo, onCustomization, avatarBorderStyle = {}, profileEmoji = null }) {
   const [activeTab, setActiveTab] = useState('points')
   const pct = Math.round((PLAYER.influence / PLAYER.influenceToNext) * 100)
 
@@ -62,7 +63,8 @@ export default function HexProfileScreen({ onBack, onChallenges, onClan, onBoost
         <div className={styles.heroCard}>
           <div className={styles.heroTop}>
             <div className={styles.avatarFrame}>
-              <img src="/assets/avatars/anton.jpeg" className={styles.avatar} alt="" />
+              <img src="/assets/avatars/anton.jpeg" className={styles.avatar} style={avatarBorderStyle} alt="" />
+              {profileEmoji && <span className={styles.emojiBadge}>{profileEmoji}</span>}
               <div className={styles.levelBadge}>{PLAYER.level}</div>
             </div>
             <div className={styles.heroInfo}>
@@ -131,6 +133,12 @@ export default function HexProfileScreen({ onBack, onChallenges, onClan, onBoost
               <Star size={20} color="#10b981" />
             </div>
             <span>Бонусы</span>
+          </button>
+          <button className={styles.quickBtn} onClick={onCustomization}>
+            <div className={styles.quickIcon} style={{ background: 'rgba(139,92,246,0.12)' }}>
+              <Palette size={20} color="#8b5cf6" />
+            </div>
+            <span>Стиль</span>
           </button>
         </div>
 
@@ -205,7 +213,7 @@ export default function HexProfileScreen({ onBack, onChallenges, onClan, onBoost
             {ACHIEVEMENTS.map(a => (
               <div key={a.id} className={`${styles.achieveCard} ${a.done ? styles.achieveDone : ''}`}>
                 <div className={styles.achieveIcon} style={{ color: a.done ? a.color : 'rgba(255,255,255,0.2)', background: a.done ? `${a.color}18` : 'rgba(255,255,255,0.04)' }}>
-                  {a.icon}
+                  {ACHIEVEMENT_ICONS[a.id]}
                 </div>
                 <span className={styles.achieveName}>{a.name}</span>
                 {a.done ? (

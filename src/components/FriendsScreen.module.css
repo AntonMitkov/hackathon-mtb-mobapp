@@ -249,6 +249,21 @@
   flex-shrink: 0;
 }
 
+.avatarEmoji {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  font-size: 14px;
+  line-height: 1;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.7));
+  pointer-events: none;
+}
+
+.historyAvatarWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
 .avatarLevel {
   position: absolute;
   bottom: -3px;
@@ -267,6 +282,16 @@
 
 .quickAvatarWrap {
   position: relative;
+}
+
+.quickEmoji {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  font-size: 14px;
+  line-height: 1;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.7));
+  pointer-events: none;
 }
 
 .quickLevel {

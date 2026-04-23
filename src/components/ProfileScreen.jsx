@@ -2,6 +2,12 @@ import { useState } from 'react'
 import styles from './ProfileScreen.module.css'
 import { ChevronLeft, ChevronRight, Bell, Shield, Smartphone, HelpCircle, LogOut, Users, Crown, Zap, Target, Flame } from 'lucide-react'
 
+const FRIENDS_DATA = [
+  { src: '/assets/avatars/egor.jpeg',  emoji: '👑', borderStyle: { border: '2px solid #f59e0b', boxShadow: '0 0 6px rgba(245,158,11,0.5)' } },
+  { src: '/assets/avatars/zlata.jpeg', emoji: '⭐', borderStyle: { border: '2px solid #94a3b8', boxShadow: '0 0 6px rgba(148,163,184,0.4)' } },
+  { src: '/assets/avatars/gleb.jpeg',  emoji: null, borderStyle: { border: '2px solid #cd7f32', boxShadow: '0 0 6px rgba(205,127,50,0.4)' } },
+]
+
 const MENU = [
   {
     group: 'Аккаунт',
@@ -19,7 +25,7 @@ const MENU = [
   },
 ]
 
-export default function ProfileScreen({ onBack, onFriends, onFeature, onHex, onHexNotifications }) {
+export default function ProfileScreen({ onBack, onFriends, onFeature, onHex, onHexNotifications, avatarBorderStyle = {}, profileEmoji = null }) {
   const [showLogout, setShowLogout] = useState(false)
 
   return (
@@ -35,7 +41,8 @@ export default function ProfileScreen({ onBack, onFriends, onFeature, onHex, onH
         {/* Avatar block */}
         <div className={styles.heroBlock}>
           <div className={styles.avatarWrap}>
-            <img src="/assets/avatars/anton.jpeg" className={styles.avatar} alt="Антон" />
+            <img src="/assets/avatars/anton.jpeg" className={styles.avatar} style={avatarBorderStyle} alt="Антон" />
+            {profileEmoji && <span className={styles.emojiBadge}>{profileEmoji}</span>}
             <div className={styles.hexLevelBadge}>12</div>
           </div>
           <span className={styles.heroName}>Антон Митьков</span>
@@ -95,14 +102,11 @@ export default function ProfileScreen({ onBack, onFriends, onFeature, onHex, onH
             </div>
           </div>
           <div className={styles.friendsAvatars}>
-            {['/assets/avatars/egor.jpeg', '/assets/avatars/zlata.jpeg', '/assets/avatars/gleb.jpeg'].map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                className={styles.friendAvatar}
-                style={{ marginLeft: i === 0 ? 0 : -10, zIndex: 3 - i }}
-                alt=""
-              />
+            {FRIENDS_DATA.map((f, i) => (
+              <div key={i} className={styles.friendAvatarWrap} style={{ marginLeft: i === 0 ? 0 : -10, zIndex: 3 - i }}>
+                <img src={f.src} className={styles.friendAvatar} style={f.borderStyle} alt="" />
+                {f.emoji && <span className={styles.friendAvatarEmoji}>{f.emoji}</span>}
+              </div>
             ))}
           </div>
         </button>

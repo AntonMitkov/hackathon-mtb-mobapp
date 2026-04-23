@@ -75,6 +75,16 @@
   display: block;
 }
 
+.emojiBadge {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  font-size: 16px;
+  line-height: 1;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.6));
+  pointer-events: none;
+}
+
 .notifDot {
   position: absolute;
   top: -5px;

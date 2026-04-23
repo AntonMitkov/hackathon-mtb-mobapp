@@ -3,9 +3,9 @@ import styles from './FriendsScreen.module.css'
 import { ChevronLeft, Search, UserPlus, ArrowUpRight, ArrowDownLeft, Users, Clock, Crown, Medal, Zap } from 'lucide-react'
 
 const FRIENDS = [
-  { id: 1, name: 'Егор Косенко',   avatar: '/assets/avatars/egor.jpeg',  phone: '+375 29 111-22-33', lastAmount: '25.00', lastDate: '21.04', hexLevel: 15, hexRank: 'gold', hexPts: 3800 },
-  { id: 2, name: 'Злата Рыбакова', avatar: '/assets/avatars/zlata.jpeg', phone: '+375 44 222-33-44', lastAmount: '50.00', lastDate: '18.04', hexLevel: 11, hexRank: 'silver', hexPts: 2900 },
-  { id: 3, name: 'Глеб Глебов',    avatar: '/assets/avatars/gleb.jpeg',  phone: '+375 33 333-44-55', lastAmount: '12.50', lastDate: '15.04', hexLevel: 8, hexRank: 'bronze', hexPts: 1850 },
+  { id: 1, name: 'Егор Косенко',   avatar: '/assets/avatars/egor.jpeg',  phone: '+375 29 111-22-33', lastAmount: '25.00', lastDate: '21.04', hexLevel: 15, hexRank: 'gold',   hexPts: 3800, emoji: '👑', borderStyle: { border: '2.5px solid #f59e0b', boxShadow: '0 0 8px rgba(245,158,11,0.55)' } },
+  { id: 2, name: 'Злата Рыбакова', avatar: '/assets/avatars/zlata.jpeg', phone: '+375 44 222-33-44', lastAmount: '50.00', lastDate: '18.04', hexLevel: 11, hexRank: 'silver', hexPts: 2900, emoji: '⭐', borderStyle: { border: '2.5px solid #94a3b8', boxShadow: '0 0 8px rgba(148,163,184,0.45)' } },
+  { id: 3, name: 'Глеб Глебов',    avatar: '/assets/avatars/gleb.jpeg',  phone: '+375 33 333-44-55', lastAmount: '12.50', lastDate: '15.04', hexLevel: 8,  hexRank: 'bronze', hexPts: 1850, emoji: null, borderStyle: { border: '2.5px solid #cd7f32', boxShadow: '0 0 8px rgba(205,127,50,0.45)' } },
 ]
 
 const HISTORY = [
@@ -104,7 +104,8 @@ export default function FriendsScreen({ onBack, onSendMoney, onRequestMoney, onS
                   {FRIENDS.map(f => (
                     <button key={f.id} className={styles.quickItem} onClick={() => onSendMoney?.(f.id)}>
                       <div className={styles.quickAvatarWrap}>
-                        <img src={f.avatar} className={styles.quickAvatar} alt={f.name} />
+                        <img src={f.avatar} className={styles.quickAvatar} style={f.borderStyle} alt={f.name} />
+                        {f.emoji && <span className={styles.quickEmoji}>{f.emoji}</span>}
                         <div className={styles.quickLevel} style={{ background: RANK_COLOR[f.hexRank] }}>{f.hexLevel}</div>
                       </div>
                       <span className={styles.quickName}>{f.name.split(' ')[0]}</span>
@@ -122,7 +123,8 @@ export default function FriendsScreen({ onBack, onSendMoney, onRequestMoney, onS
                 {filtered.map((f, i) => (
                   <div key={f.id} className={styles.friendRow} style={{ animationDelay: `${i * 0.07}s` }}>
                     <div className={styles.avatarWrap}>
-                      <img src={f.avatar} className={styles.avatar} alt={f.name} />
+                      <img src={f.avatar} className={styles.avatar} style={f.borderStyle} alt={f.name} />
+                      {f.emoji && <span className={styles.avatarEmoji}>{f.emoji}</span>}
                       <div className={styles.avatarLevel} style={{ background: RANK_COLOR[f.hexRank] }}>{f.hexLevel}</div>
                     </div>
                     <div className={styles.friendInfo}>
@@ -163,7 +165,10 @@ export default function FriendsScreen({ onBack, onSendMoney, onRequestMoney, onS
                 const friend = FRIENDS.find(f => f.id === h.friendId)
                 return (
                   <div key={h.id} className={styles.historyRow} style={{ animationDelay: `${i * 0.06}s` }}>
-                    <img src={friend.avatar} className={styles.avatar} alt={friend.name} />
+                    <div className={styles.historyAvatarWrap}>
+                      <img src={friend.avatar} className={styles.avatar} style={friend.borderStyle} alt={friend.name} />
+                      {friend.emoji && <span className={styles.avatarEmoji}>{friend.emoji}</span>}
+                    </div>
                     <div className={styles.friendInfo}>
                       <span className={styles.friendName}>{friend.name}</span>
                       <span className={styles.friendPhone}>
