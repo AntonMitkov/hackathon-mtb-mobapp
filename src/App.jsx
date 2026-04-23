@@ -26,7 +26,11 @@ import ClanScreen from './components/ClanScreen'
 import MysteryBoxScreen from './components/MysteryBoxScreen'
 import HexNotificationsScreen from './components/HexNotificationsScreen'
 import PromoScreen from './components/PromoScreen'
-import BonusesBanner from './components/BonusesBanner'
+import StreaksBanner from './components/StreaksBanner'
+import StreaksScreen from './components/StreaksScreen'
+import CreateGroupScreen from './components/CreateGroupScreen'
+import GroupChatScreen from './components/GroupChatScreen'
+import GroupInfluenceScreen from './components/GroupInfluenceScreen'
 import StoryScreen from './components/StoryScreen'
 import CustomizationScreen from './components/CustomizationScreen'
 import { ACHIEVEMENTS } from './data/achievements'
@@ -78,6 +82,7 @@ export default function App() {
   const [storyTx, setStoryTx] = useState(null)
   const [homeTxPhoto, setHomeTxPhoto] = useState(null)
   const [promoBack, setPromoBack] = useState('home')
+  const [activeGroupId, setActiveGroupId] = useState(null)
 
   const [selectedCardDesign, setSelectedCardDesign] = useState('default')
   const [selectedAvatarBorder, setSelectedAvatarBorder] = useState('default')
@@ -175,6 +180,10 @@ export default function App() {
   if (screen === 'mysteryBox') return <MysteryBoxScreen onBack={() => setScreen('hex')} />
   if (screen === 'hexNotifications') return <HexNotificationsScreen onBack={() => setScreen('profile')} />
   if (screen === 'promo') return <PromoScreen onBack={() => setScreen(promoBack)} />
+  if (screen === 'streaks') return <StreaksScreen onBack={() => setScreen('home')} onCreateGroup={() => setScreen('createGroup')} onGroupChat={(groupId) => { setActiveGroupId(groupId); setScreen('groupChat') }} />
+  if (screen === 'createGroup') return <CreateGroupScreen onBack={() => setScreen('streaks')} onGroupCreated={() => { setActiveGroupId(1); setScreen('groupChat') }} />
+  if (screen === 'groupChat') return <GroupChatScreen groupId={activeGroupId} onBack={() => setScreen('streaks')} onInfluence={() => setScreen('groupInfluence')} />
+  if (screen === 'groupInfluence') return <GroupInfluenceScreen groupId={activeGroupId} onBack={() => setScreen('groupChat')} />
 
   if (screen === 'feature') return (
     <FeatureScreen
@@ -264,7 +273,7 @@ export default function App() {
           amount="-9.79"
           onClick={() => setShowTxDetail(true)}
         />
-        <BonusesBanner onClick={() => { setPromoBack('home'); setScreen('promo') }} />
+        <StreaksBanner onClick={() => setScreen('streaks')} />
         <ExchangeBanner onClick={() => openFeature('mobyExchange', 'home')} />
         <ServiceBanner onClick={() => {
           setActiveTab('products')

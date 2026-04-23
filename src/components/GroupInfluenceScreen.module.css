@@ -1,0 +1,111 @@
+@keyframes screenSlideIn {
+  from { transform: translateX(40px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes fadeInUp {
+  from { transform: translateY(14px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes scaleIn {
+  from { transform: scale(0.93); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.screen {
+  max-width: 430px; margin: 0 auto; min-height: 100vh;
+  background: var(--dark-bg); display: flex; flex-direction: column;
+  animation: screenSlideIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.topBar { display: flex; align-items: center; gap: 12px; padding: 56px 20px 12px; flex-shrink: 0; }
+.backBtn { background: none; border: none; cursor: pointer; padding: 4px 8px 4px 0; display: flex; align-items: center; }
+.topTitle { font-size: 20px; font-weight: 600; color: #fff; }
+.scrollArea { flex: 1; overflow-y: auto; padding: 0 20px 40px; }
+
+/* Hero */
+.heroCard {
+  background: linear-gradient(135deg, #1c1f2e, #1a2235);
+  border: 1px solid rgba(245,158,11,0.15);
+  border-radius: 20px; padding: 20px; margin-bottom: 24px;
+  animation: scaleIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+.heroStats { display: flex; align-items: center; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 14px 0; }
+.heroStat { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.heroStatNum { font-size: 18px; font-weight: 700; color: #fff; }
+.heroStatLabel { font-size: 11px; color: rgba(255,255,255,0.35); }
+.heroStatDiv { width: 1px; height: 28px; background: rgba(255,255,255,0.08); }
+
+/* Section */
+.section { margin-bottom: 24px; }
+.sectionTitle {
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.4);
+  text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 12px;
+}
+
+/* Bars */
+.barsList { display: flex; flex-direction: column; gap: 14px; }
+.barRow {
+  display: flex; flex-direction: column; gap: 6px;
+  animation: fadeInUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.barHeader { display: flex; align-items: center; gap: 8px; }
+.barAvatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+.barName { flex: 1; font-size: 14px; font-weight: 600; color: #fff; }
+.barPct { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.6); }
+.barPts {
+  display: flex; align-items: center; gap: 3px;
+  font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.5);
+}
+
+.barTrack {
+  height: 8px; background: rgba(255,255,255,0.06);
+  border-radius: 4px; overflow: hidden;
+}
+.barFill {
+  height: 100%; border-radius: 4px;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Members ranking */
+.membersList { display: flex; flex-direction: column; gap: 2px; background: #1c1f2e; border-radius: 16px; overflow: hidden; }
+.memberRow {
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  animation: fadeInUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.memberRow:last-child { border-bottom: none; }
+.memberRank { font-size: 14px; font-weight: 700; width: 28px; text-align: center; }
+.memberAvatarWrap { position: relative; flex-shrink: 0; }
+.memberAvatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; display: block; border: 1.5px solid rgba(255,255,255,0.1); }
+.memberInfo { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.memberName { font-size: 15px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 6px; }
+.memberMeta { font-size: 12px; color: rgba(255,255,255,0.35); }
+.memberPts { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.7); }
+
+.youTag {
+  font-size: 9px; font-weight: 700; color: #8b5cf6; background: rgba(139,92,246,0.15);
+  padding: 2px 6px; border-radius: 4px; text-transform: uppercase;
+}
+
+/* Captured points */
+.pointsList { display: flex; flex-direction: column; gap: 2px; background: #1c1f2e; border-radius: 16px; overflow: hidden; }
+.pointRow {
+  display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  animation: fadeInUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.pointRow:last-child { border-bottom: none; }
+
+.pointIcon {
+  width: 36px; height: 36px; border-radius: 10px;
+  border: 1.5px solid; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0;
+}
+.pointInfo { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.pointName { font-size: 14px; font-weight: 600; color: #fff; }
+.pointController {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 12px; color: rgba(255,255,255,0.4);
+}
+.pointControllerAvatar { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
+.pointCashback { font-size: 14px; font-weight: 700; color: #34d399; }
