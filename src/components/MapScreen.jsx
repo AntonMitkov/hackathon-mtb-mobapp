@@ -1,247 +1,265 @@
-import { useEffect, useRef, useState } from 'react'
-import styles from './MapScreen.module.css'
-import { ChevronDown, ChevronUp, Navigation } from 'lucide-react'
-import L from 'leaflet'
+import { useState } from 'react'
+import MapView from './map/MapView'
+import SettingsMenu from './map/SettingsMenu'
+import BottomDrawer from './map/BottomDrawer'
+import LeaderboardOverlay from './map/LeaderboardOverlay'
+import PartnerModal from './map/PartnerModal'
+import UserProfileModal from './map/UserProfileModal'
+import { FILTER_GROUPS, CURRENT_USER, FRIENDS, STREAKS, getStreakMembers } from '../data/mapData'
+import { Flame, Settings as SettingsIcon, ChevronDown, X } from 'lucide-react'
 import 'leaflet/dist/leaflet.css'
-
-const MINSK_CENTER = [53.9006, 27.5590]
-
-const FRIENDS = [
-  { id: 1, name: 'Егор',  avatar: '/assets/avatars/egor.jpeg',  lat: 53.9085, lng: 27.5515, lastSeen: '5 мин назад' },
-  { id: 2, name: 'Злата', avatar: '/assets/avatars/zlata.jpeg', lat: 53.8932, lng: 27.5843, lastSeen: '12 мин назад' },
-  { id: 3, name: 'Глеб',  avatar: '/assets/avatars/gleb.jpeg',  lat: 53.9178, lng: 27.5180, lastSeen: '1 ч назад' },
-]
-
-const PARTNERS = [
-  { id: 'p1',  name: 'Green Cafe',         cat: 'Кафе',        lat: 53.9023, lng: 27.5618, cashback: '10%' },
-  { id: 'p2',  name: 'BarBQ',              cat: 'Ресторан',    lat: 53.9102, lng: 27.5490, cashback: '5%' },
-  { id: 'p3',  name: 'BeautyLab',          cat: 'Красота',     lat: 53.8875, lng: 27.5735, cashback: '8%' },
-  { id: 'p4',  name: 'SportLife',           cat: 'Фитнес',      lat: 53.9210, lng: 27.5330, cashback: '7%' },
-  { id: 'p5',  name: 'ТЦ Galleria',        cat: 'Шоппинг',     lat: 53.9057, lng: 27.5467, cashback: '3%' },
-  { id: 'p6',  name: 'АЗС Белнефтехим',    cat: 'АЗС',         lat: 53.8790, lng: 27.6100, cashback: '4%' },
-  { id: 'p7',  name: 'Аптека Линия',        cat: 'Аптека',      lat: 53.9155, lng: 27.5720, cashback: '6%' },
-  { id: 'p8',  name: 'PizzaHut',           cat: 'Кафе',        lat: 53.8985, lng: 27.5380, cashback: '10%' },
-  { id: 'p9',  name: 'Евроопт',            cat: 'Продукты',    lat: 53.9245, lng: 27.5555, cashback: '2%' },
-  { id: 'p10', name: 'BookCity',            cat: 'Книги',       lat: 53.8915, lng: 27.5290, cashback: '12%' },
-  { id: 'p11', name: 'AutoSpa',            cat: 'Авто',        lat: 53.8830, lng: 27.5950, cashback: '5%' },
-  { id: 'p12', name: 'CoffeeBreak',        cat: 'Кафе',        lat: 53.9060, lng: 27.5790, cashback: '15%' },
-  { id: 'p13', name: 'Мир техники',         cat: 'Электроника', lat: 53.9130, lng: 27.5065, cashback: '4%' },
-  { id: 'p14', name: 'Пекарня №1',          cat: 'Кафе',        lat: 53.8960, lng: 27.5670, cashback: '8%' },
-  { id: 'p15', name: 'ФитнесHouse',        cat: 'Фитнес',      lat: 53.9070, lng: 27.6020, cashback: '6%' },
-]
-
-const CAT_COLORS = {
-  'Кафе': '#f59e0b',
-  'Ресторан': '#ef4444',
-  'Красота': '#ec4899',
-  'Фитнес': '#8b5cf6',
-  'Шоппинг': '#3b82f6',
-  'АЗС': '#6b7280',
-  'Аптека': '#10b981',
-  'Продукты': '#22c55e',
-  'Книги': '#a78bfa',
-  'Авто': '#64748b',
-  'Электроника': '#0ea5e9',
-}
-
-function createFriendIcon(avatar) {
-  return L.divIcon({
-    className: '',
-    html: `<div style="
-      width:44px;height:44px;border-radius:50%;
-      border:3px solid #4a80f5;
-      background:url(${avatar}) center/cover no-repeat;
-      box-shadow:0 2px 8px rgba(74,128,245,0.5);
-    "></div>`,
-    iconSize: [44, 44],
-    iconAnchor: [22, 22],
-  })
-}
-
-function createPartnerIcon(color) {
-  return L.divIcon({
-    className: '',
-    html: `<div style="
-      width:14px;height:14px;border-radius:50%;
-      background:${color};
-      border:2.5px solid rgba(255,255,255,0.9);
-      box-shadow:0 1px 6px ${color}88;
-    "></div>`,
-    iconSize: [14, 14],
-    iconAnchor: [7, 7],
-  })
-}
+import '../styles/map.css'
 
 export default function MapScreen() {
-  const mapContainer = useRef(null)
-  const mapRef = useRef(null)
-  const [selected, setSelected] = useState(null)
-  const [filter, setFilter] = useState('all') // 'all' | 'friends' | 'partners'
-  const [panelOpen, setPanelOpen] = useState(false)
+  const [activeTab, setActiveTab] = useState('all')
+  const [streaksOpen, setStreaksOpen] = useState(false)
+  const [selectedStreakId, setSelectedStreakId] = useState(null)
 
-  useEffect(() => {
-    if (mapRef.current) return
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [geoEnabled, setGeoEnabled] = useState(true)
+  const [showOnlyMine, setShowOnlyMine] = useState(false)
+  const [categoryFilters, setCategoryFilters] = useState(
+    FILTER_GROUPS.reduce((acc, g) => [...acc, ...g.categories], []),
+  )
 
-    const map = L.map(mapContainer.current, {
-      center: MINSK_CENTER,
-      zoom: 13,
-      zoomControl: false,
-      attributionControl: false,
+  const [leaderboardOpen, setLeaderboardOpen] = useState(false)
+  const [selectedPartner, setSelectedPartner] = useState(null)
+  const [detailedPartner, setDetailedPartner] = useState(null)
+  const [selectedFriend, setSelectedFriend] = useState(null)
+
+  const [mapCenter, setMapCenter] = useState([CURRENT_USER.lat, CURRENT_USER.lng])
+  const [mapZoom, setMapZoom] = useState(13)
+
+  const [focusedFriend, setFocusedFriend] = useState(null)
+
+  const toggleCategory = (categories) => {
+    setCategoryFilters(prev => {
+      const allOn = categories.every(c => prev.includes(c))
+      return allOn
+        ? prev.filter(c => !categories.includes(c))
+        : [...new Set([...prev, ...categories])]
     })
+  }
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 19,
-    }).addTo(map)
+  const handleCenterGeo = () => {
+    setMapCenter([CURRENT_USER.lat, CURRENT_USER.lng])
+    setMapZoom(13)
+  }
 
-    mapRef.current = map
+  const handleSelectFriend = (friend) => {
+    setFocusedFriend(friend)
+    setMapCenter([friend.lat - 0.005, friend.lng])
+    setMapZoom(15)
+  }
 
-    // Friends
-    FRIENDS.forEach(f => {
-      const marker = L.marker([f.lat, f.lng], { icon: createFriendIcon(f.avatar) }).addTo(map)
-      marker.on('click', () => {
-        setSelected({ type: 'friend', data: f })
-        setPanelOpen(true)
-      })
-      marker._friendId = f.id
-    })
+  const handleClearFocus = () => {
+    setFocusedFriend(null)
+    setMapZoom(13)
+  }
 
-    // Partners
-    PARTNERS.forEach(p => {
-      const color = CAT_COLORS[p.cat] || '#4a80f5'
-      const marker = L.marker([p.lat, p.lng], { icon: createPartnerIcon(color) }).addTo(map)
-      marker.on('click', () => {
-        setSelected({ type: 'partner', data: p })
-        setPanelOpen(true)
-      })
-      marker._partnerId = p.id
-    })
-
-    return () => {
-      map.remove()
-      mapRef.current = null
-    }
-  }, [])
-
-  // Filter markers
-  useEffect(() => {
-    if (!mapRef.current) return
-    mapRef.current.eachLayer(layer => {
-      if (!layer._friendId && !layer._partnerId) return
-      if (filter === 'all') {
-        layer.getElement()?.style && (layer.getElement().style.display = '')
-      } else if (filter === 'friends') {
-        layer.getElement()?.style && (layer.getElement().style.display = layer._friendId ? '' : 'none')
-      } else {
-        layer.getElement()?.style && (layer.getElement().style.display = layer._partnerId ? '' : 'none')
-      }
-    })
-  }, [filter])
-
-  const recenter = () => {
-    mapRef.current?.flyTo(MINSK_CENTER, 13, { duration: 0.5 })
+  const descriptions = {
+    'Рестораны': 'Изысканная кухня и уютная атмосфера. Идеальное место для деловых встреч и семейных ужинов. Накапливайте влияние и получайте эксклюзивные скидки.',
+    'Фастфуд': 'Быстро, вкусно и удобно. Заходите за любимыми блюдами и повышайте свой рейтинг в категории быстрых перекусов.',
+    'Ювелирная сеть': 'Мир блеска и красоты. Каждая покупка здесь значительно увеличивает ваше влияние и приближает к статусу VIP-клиента.',
+    'Супермаркет': 'Все необходимое для дома в одном месте. Регулярные покупки помогут вам удерживать лидерство в районе.',
+    'Здоровье': 'Забота о вашем здоровье с современными технологиями. Качественные услуги и бонусы для постоянных клиентов.',
+    'Техника': 'Самые современные гаджеты и бытовая электроника. Будьте в центре технологического прогресса и копите баллы.',
   }
 
   return (
-    <div className={styles.screen}>
-      {/* Filter chips */}
-      <div className={styles.filterBar}>
-        {[
-          { id: 'all', label: 'Все' },
-          { id: 'friends', label: 'Друзья' },
-          { id: 'partners', label: 'Партнёры' },
-        ].map(f => (
+    <div className="map-screen-root">
+      {/* Top Toolbar */}
+      <div className="tab-bar" style={{ justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', gap: '6px' }}>
           <button
-            key={f.id}
-            className={`${styles.chip} ${filter === f.id ? styles.chipActive : ''}`}
-            onClick={() => setFilter(f.id)}
+            className={`tab-btn ${activeTab === 'all' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('all'); setFocusedFriend(null); setStreaksOpen(false); setSelectedStreakId(null) }}
+          >Все</button>
+
+          <button
+            className={`tab-btn ${activeTab === 'partners' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('partners'); setFocusedFriend(null); setStreaksOpen(false); setSelectedStreakId(null) }}
+          >Партнёры</button>
+
+          <button
+            className={`tab-btn ${activeTab === 'streaks' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('streaks'); setStreaksOpen(!streaksOpen); setSettingsOpen(false) }}
+            style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
           >
-            {f.label}
+            Стрики <ChevronDown size={14} style={{ transform: streaksOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
           </button>
-        ))}
-      </div>
+        </div>
 
-      {/* Recenter button */}
-      <button className={styles.recenterBtn} onClick={recenter}>
-        <Navigation size={20} color="#4a80f5" />
-      </button>
-
-      {/* Map */}
-      <div ref={mapContainer} className={styles.mapContainer} />
-
-      {/* Bottom panel */}
-      <div className={`${styles.panel} ${panelOpen ? styles.panelOpen : ''}`}>
-        <button className={styles.panelHandle} onClick={() => setPanelOpen(!panelOpen)}>
-          {panelOpen ? <ChevronDown size={20} color="rgba(255,255,255,0.4)" /> : <ChevronUp size={20} color="rgba(255,255,255,0.4)" />}
+        <button
+          className={`tab-btn ${settingsOpen ? 'active' : ''}`}
+          onClick={() => { setSettingsOpen(!settingsOpen); setStreaksOpen(false) }}
+          style={{ padding: '8px 12px' }}
+        >
+          <SettingsIcon size={18} />
         </button>
 
-        {selected ? (
-          selected.type === 'friend' ? (
-            <div className={styles.panelContent}>
-              <img src={selected.data.avatar} className={styles.panelAvatar} alt="" />
-              <div className={styles.panelInfo}>
-                <span className={styles.panelName}>{selected.data.name}</span>
-                <span className={styles.panelSub}>{selected.data.lastSeen}</span>
+        {streaksOpen && (
+          <div className="streaks-dropdown">
+            {STREAKS.map((s, i) => (
+              <div
+                key={s.id}
+                className={`streak-item ${selectedStreakId === s.id ? 'active' : ''}`}
+                onClick={() => {
+                  setSelectedStreakId(s.id)
+                  setStreaksOpen(false)
+                  const members = getStreakMembers(s.id)
+                  if (members.length > 1) {
+                    setMapCenter([members[1].lat, members[1].lng])
+                  }
+                  setMapZoom(14)
+                }}
+              >
+                <div className="streak-info-col" style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span className="streak-name">{i + 1}. streak ({s.name})</span>
+                  <span className="streak-cashback-badge" style={{ color: '#4bbe6a', fontSize: '0.7rem', fontWeight: 700, marginTop: '2px' }}>
+                    Общий кэшбэк: {s.totalCashback}%
+                  </span>
+                </div>
+                <div className="fire-icon-wrap">
+                  <Flame
+                    size={20}
+                    className={`fire-icon ${s.maintained ? 'active' : 'inactive'}`}
+                    fill={s.maintained ? 'currentColor' : 'none'}
+                  />
+                  <span className="streak-count">{s.days}</span>
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className={styles.panelContent}>
-              <div className={styles.panelPartnerIcon} style={{ background: CAT_COLORS[selected.data.cat] || '#4a80f5' }}>
-                <span>{selected.data.name.charAt(0)}</span>
-              </div>
-              <div className={styles.panelInfo}>
-                <span className={styles.panelName}>{selected.data.name}</span>
-                <span className={styles.panelSub}>{selected.data.cat}</span>
-              </div>
-              <div className={styles.panelCashback}>
-                <span className={styles.cashbackValue}>{selected.data.cashback}</span>
-                <span className={styles.cashbackLabel}>кэшбэк</span>
-              </div>
-            </div>
-          )
-        ) : (
-          <div className={styles.panelHint}>
-            <span>Друзей рядом: <b>{FRIENDS.length}</b></span>
-            <span className={styles.panelDot}>·</span>
-            <span>Партнёров: <b>{PARTNERS.length}</b></span>
-          </div>
-        )}
-
-        {panelOpen && (
-          <div className={styles.panelList}>
-            <div className={styles.panelSection}>
-              <span className={styles.panelSectionTitle}>Друзья рядом</span>
-              {FRIENDS.map(f => (
-                <button key={f.id} className={styles.listRow} onClick={() => {
-                  setSelected({ type: 'friend', data: f })
-                  mapRef.current?.flyTo([f.lat, f.lng], 15, { duration: 0.4 })
-                }}>
-                  <img src={f.avatar} className={styles.listAvatar} alt="" />
-                  <div className={styles.listInfo}>
-                    <span className={styles.listName}>{f.name}</span>
-                    <span className={styles.listSub}>{f.lastSeen}</span>
-                  </div>
-                </button>
-              ))}
-            </div>
-            <div className={styles.panelSection}>
-              <span className={styles.panelSectionTitle}>Партнёры с кэшбэком</span>
-              {PARTNERS.slice(0, 6).map(p => (
-                <button key={p.id} className={styles.listRow} onClick={() => {
-                  setSelected({ type: 'partner', data: p })
-                  mapRef.current?.flyTo([p.lat, p.lng], 15, { duration: 0.4 })
-                }}>
-                  <div className={styles.listPartnerDot} style={{ background: CAT_COLORS[p.cat] || '#4a80f5' }} />
-                  <div className={styles.listInfo}>
-                    <span className={styles.listName}>{p.name}</span>
-                    <span className={styles.listSub}>{p.cat}</span>
-                  </div>
-                  <span className={styles.listCashback}>{p.cashback}</span>
-                </button>
-              ))}
-            </div>
+            ))}
           </div>
         )}
       </div>
+
+      {/* Settings Overlay */}
+      {settingsOpen && (
+        <SettingsMenu
+          geoEnabled={geoEnabled}
+          onToggleGeo={() => setGeoEnabled(!geoEnabled)}
+          categoryFilters={categoryFilters}
+          onToggleCategory={toggleCategory}
+          onOpenLeaderboard={() => { setLeaderboardOpen(true); setSettingsOpen(false) }}
+          settingsOpen={settingsOpen}
+          onToggleSettings={() => setSettingsOpen(false)}
+          onCenterMap={handleCenterGeo}
+          showOnlyMine={showOnlyMine}
+          onToggleOnlyMine={() => setShowOnlyMine(!showOnlyMine)}
+        />
+      )}
+
+      {/* Map */}
+      <MapView
+        activeTab={activeTab === 'streaks' ? 'friends' : activeTab}
+        categoryFilters={categoryFilters}
+        focusedFriend={focusedFriend}
+        selectedStreakId={selectedStreakId}
+        onSelectPartner={setSelectedPartner}
+        onSelectFriend={setSelectedFriend}
+        mapCenter={mapCenter}
+        mapZoom={mapZoom}
+        geoEnabled={geoEnabled}
+        showOnlyMine={showOnlyMine}
+      />
+
+      {/* Bottom Drawer */}
+      {activeTab !== 'partners' && !leaderboardOpen && (
+        <BottomDrawer
+          focusedFriend={focusedFriend}
+          onSelectFriend={handleSelectFriend}
+          onClearFocus={handleClearFocus}
+          activeTab={activeTab}
+          selectedStreakId={selectedStreakId}
+        />
+      )}
+
+      {/* Overlays */}
+      {leaderboardOpen && (
+        <LeaderboardOverlay
+          selectedStreakId={selectedStreakId}
+          onClose={() => setLeaderboardOpen(false)}
+          onSelectUser={(u) => {
+            setMapCenter([u.lat, u.lng])
+            setMapZoom(16)
+            if (FRIENDS.find(f => f.id === u.id)) setSelectedFriend(u)
+          }}
+        />
+      )}
+
+      {selectedPartner && (
+        <PartnerModal
+          partner={selectedPartner}
+          onClose={() => setSelectedPartner(null)}
+          onOpenDetails={() => {
+            setDetailedPartner(selectedPartner)
+            setSelectedPartner(null)
+          }}
+          onSelectUser={setSelectedFriend}
+          context={activeTab}
+        />
+      )}
+
+      {detailedPartner && (
+        <div className={`point-details-view active`}>
+          <div className="pd-header">
+            <button className="pd-back" onClick={() => setDetailedPartner(null)}><X size={24} /></button>
+            <h2>Детали точки</h2>
+          </div>
+          <div className="pd-content">
+            <div className="pd-hero">
+              <img src={detailedPartner.logo} alt={detailedPartner.name} className="pd-logo" />
+              <div className="pd-main-info">
+                <h3 className="pd-partner-name">{detailedPartner.name}</h3>
+                <p className="pd-category">{detailedPartner.category}</p>
+                <p className="pd-address">{detailedPartner.address}</p>
+              </div>
+            </div>
+
+            <div className="pd-section">
+              <h3>Об организации</h3>
+              <p>
+                {descriptions[detailedPartner.category] || 'Премиальное заведение нашего города. Мы ценим каждого клиента и предлагаем лучшие условия в рамках программы лояльности.'}
+              </p>
+            </div>
+
+            <div className="pd-section">
+              <h3>Статистика точки</h3>
+              <div className="pd-stats-row">
+                <div className="pd-stat-box">
+                  <span className="pd-stat-val">{Math.floor(Math.random() * 500 + 100)}</span>
+                  <span className="pd-stat-lbl">Визитов</span>
+                </div>
+                <div className="pd-stat-box">
+                  <span className="pd-stat-val">{Math.floor(Math.random() * 10000 + 5000)}</span>
+                  <span className="pd-stat-lbl">Оборот</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pd-section">
+              <h3>Ваши преимущества</h3>
+              <ul className="pd-list">
+                <li>Повышенный кэшбэк 5% для всех</li>
+                <li>+100 Influence points за чек от 50 BYN</li>
+                <li>Скидка 15% для текущего лидера точки</li>
+              </ul>
+            </div>
+
+            <button className="pd-action-btn" onClick={() => alert('Маршрут построен!')}>
+              Построить маршрут
+            </button>
+          </div>
+        </div>
+      )}
+
+      {selectedFriend && (
+        <UserProfileModal
+          user={selectedFriend}
+          onClose={() => setSelectedFriend(null)}
+        />
+      )}
     </div>
   )
 }

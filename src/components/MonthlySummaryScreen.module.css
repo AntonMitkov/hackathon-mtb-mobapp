@@ -1,0 +1,278 @@
+.screen {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--dark-bg, #0d0d11);
+  color: #f0f0f4;
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 52px 16px 12px;
+  flex-shrink: 0;
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.monthSelector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 8px 16px 16px;
+  flex-shrink: 0;
+}
+
+.monthArrow {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+}
+
+.monthLabel {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px 100px;
+}
+
+.profileHero {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 4px 0;
+}
+
+.profileAvatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(139,92,246,0.5);
+  box-shadow: 0 0 20px rgba(139,92,246,0.25);
+  flex-shrink: 0;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profileName {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.profileSub {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.45);
+  font-weight: 500;
+}
+
+.totalCard {
+  background: linear-gradient(135deg, rgba(59,110,237,0.15), rgba(139,92,246,0.1));
+  border: 1px solid rgba(59,110,237,0.2);
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.totalLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.totalAmount {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.totalSub {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #4bbe6a;
+  font-weight: 600;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.statCard {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+}
+
+.statValue {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.statLabel {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.4);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section {
+  margin-bottom: 28px;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.catRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.catIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.catInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.catHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.catName {
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.catAmount {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
+}
+
+.catBarTrack {
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 100px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.catBarFill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.5s ease;
+}
+
+.catPct {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.35);
+  font-weight: 500;
+}
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.photoCard {
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.photoImg {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.photoInfo {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.photoMerchant {
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.photoAmount {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.4);
+  font-weight: 600;
+}

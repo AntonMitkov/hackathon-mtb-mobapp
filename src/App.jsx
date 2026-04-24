@@ -33,6 +33,7 @@ import GroupChatScreen from './components/GroupChatScreen'
 import GroupInfluenceScreen from './components/GroupInfluenceScreen'
 import StoryScreen from './components/StoryScreen'
 import CustomizationScreen from './components/CustomizationScreen'
+import MonthlySummaryScreen from './components/MonthlySummaryScreen'
 import { ACHIEVEMENTS } from './data/achievements'
 import styles from './App.module.css'
 
@@ -184,6 +185,7 @@ export default function App() {
   if (screen === 'createGroup') return <CreateGroupScreen onBack={() => setScreen('streaks')} onGroupCreated={() => { setActiveGroupId(1); setScreen('groupChat') }} />
   if (screen === 'groupChat') return <GroupChatScreen groupId={activeGroupId} onBack={() => setScreen('streaks')} onInfluence={() => setScreen('groupInfluence')} />
   if (screen === 'groupInfluence') return <GroupInfluenceScreen groupId={activeGroupId} onBack={() => setScreen('groupChat')} />
+  if (screen === 'monthlySummary') return <MonthlySummaryScreen onBack={() => setScreen('home')} />
 
   if (screen === 'feature') return (
     <FeatureScreen
@@ -274,6 +276,17 @@ export default function App() {
           onClick={() => setShowTxDetail(true)}
         />
         <StreaksBanner onClick={() => setScreen('streaks')} />
+        <div
+          className={styles.monthlyBanner}
+          onClick={() => setScreen('monthlySummary')}
+        >
+          <div className={styles.monthlyBannerIcon}>📊</div>
+          <div className={styles.monthlyBannerText}>
+            <span className={styles.monthlyBannerTitle}>Итоги апреля</span>
+            <span className={styles.monthlyBannerSub}>Траты, кэшбэк и фото за месяц</span>
+          </div>
+          <span className={styles.monthlyBannerArrow}>→</span>
+        </div>
         <ExchangeBanner onClick={() => openFeature('mobyExchange', 'home')} />
         <ServiceBanner onClick={() => {
           setActiveTab('products')
