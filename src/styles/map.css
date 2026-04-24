@@ -21,7 +21,7 @@
   --map-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   position: relative;
-  height: calc(100dvh - 70px - env(safe-area-inset-bottom, 0px));
+  height: 100dvh;
   width: 100%;
   background: var(--map-dark-bg);
   overflow: hidden;
@@ -791,7 +791,7 @@
    =================================================================== */
 .map-screen-root .bottom-drawer {
   position: absolute;
-  bottom: 0;
+  bottom: calc(70px + env(safe-area-inset-bottom, 0px));
   left: 0;
   right: 0;
   background: var(--map-card-bg);
@@ -800,8 +800,7 @@
   border-radius: 32px 32px 0 0;
   z-index: 900;
   transition: transform 0.4s var(--map-ease);
-  max-height: calc(52vh + env(safe-area-inset-bottom));
-  padding-bottom: env(safe-area-inset-bottom);
+  max-height: 52vh;
 }
 
 .map-screen-root .drawer-handle {
